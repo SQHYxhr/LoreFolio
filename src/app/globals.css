@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-noto-serif);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #f6f1e8;
+  --foreground: #3d3830;
+  --card: #fffcf7;
+  --card-foreground: #3d3830;
+  --popover: #fffcf7;
+  --popover-foreground: #3d3830;
+  --primary: #6b7c6e;
+  --primary-foreground: #f8faf8;
+  --secondary: #ebe4d8;
+  --secondary-foreground: #4a443c;
+  --muted: #ebe4d8;
+  --muted-foreground: #7a7268;
+  --accent: #e8ddd0;
+  --accent-foreground: #4a443c;
+  --destructive: #b85c5c;
+  --border: #ddd4c6;
+  --input: #ddd4c6;
+  --ring: #8a9a8c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(139, 154, 140, 0.08), transparent 40%),
+      radial-gradient(circle at 80% 0%, rgba(180, 160, 130, 0.1), transparent 35%);
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .paper-shadow {
+    box-shadow:
+      0 1px 2px rgba(61, 56, 48, 0.04),
+      0 8px 24px rgba(61, 56, 48, 0.06);
+  }
+
+  .panel-border {
+    @apply border border-border/80;
+  }
+}
+
+/* 设定集正文排版 */
+.entry-prose p {
+  margin: 0.75em 0;
+}
+
+.entry-prose h2 {
+  font-family: var(--font-noto-serif), serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.25em 0 0.5em;
+}
+
+.entry-prose ul,
+.entry-prose ol {
+  margin: 0.5em 0;
+  padding-left: 1.25rem;
+}
+
+.entry-prose img {
+  margin: 1rem auto;
+  max-width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  cursor: zoom-in;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.entry-prose img:hover {
+  box-shadow: 0 8px 24px rgba(61, 56, 48, 0.12);
+  transform: scale(1.01);
+}
+
+.entry-editor p.is-editor-empty:first-child::before {
+  color: var(--muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.entry-editor img {
+  margin: 0.75rem auto;
+  max-width: 100%;
+  border-radius: 0.75rem;
+}
