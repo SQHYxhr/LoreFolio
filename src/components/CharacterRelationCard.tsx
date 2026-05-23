@@ -1,25 +1,11 @@
 "use client";
 
 import { ArrowRight, ArrowRightLeft, Edit3, Trash2 } from "lucide-react";
-import type { CharacterRelation, Entry, RelationType } from "@/types";
+import type { CharacterRelation, Entry } from "@/types";
 import { RELATION_TYPE_LABELS } from "@/types";
 import { cn } from "@/lib/utils";
+import { RELATION_CARD_CLASSES } from "@/lib/relation-colors";
 import { Badge } from "@/components/ui/badge";
-
-const RELATION_COLORS: Record<RelationType, { border: string; bg: string }> = {
-  friend:     { border: "border-emerald-500", bg: "bg-emerald-500/10" },
-  family:     { border: "border-blue-500", bg: "bg-blue-500/10" },
-  lover:      { border: "border-rose-500", bg: "bg-rose-500/10" },
-  enemy:      { border: "border-red-500", bg: "bg-red-500/10" },
-  mentor:     { border: "border-purple-500", bg: "bg-purple-500/10" },
-  student:    { border: "border-cyan-500", bg: "bg-cyan-500/10" },
-  ally:       { border: "border-teal-500", bg: "bg-teal-500/10" },
-  rival:      { border: "border-orange-500", bg: "bg-orange-500/10" },
-  colleague:  { border: "border-gray-500", bg: "bg-gray-500/10" },
-  superior:   { border: "border-amber-500", bg: "bg-amber-500/10" },
-  subordinate:{ border: "border-slate-500", bg: "bg-slate-500/10" },
-  unknown:    { border: "border-muted-foreground/30", bg: "bg-muted/30" },
-};
 
 const STATUS_LABELS: Record<string, string> = {
   current: "当前",
@@ -47,7 +33,7 @@ export function CharacterRelationCard({
   onNavigate,
 }: CharacterRelationCardProps) {
   const isFrom = relation.fromCharacterId === currentCharacterId;
-  const colors = RELATION_COLORS[relation.relationType];
+  const colors = RELATION_CARD_CLASSES[relation.relationType];
   const label = relation.customLabel || RELATION_TYPE_LABELS[relation.relationType];
   const targetId = isFrom ? relation.toCharacterId : relation.fromCharacterId;
   const targetName = targetEntry?.title || "未知角色";

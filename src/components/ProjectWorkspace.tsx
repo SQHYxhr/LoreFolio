@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { CharacterRelation, Entry, EntryFormData, EntryType, RelationDirection, RelationStatus, RelationType } from "@/types";
 import { filterEntries, getAllTags } from "@/lib/entry-filters";
 import { useStore } from "@/hooks/use-store";
@@ -46,6 +46,31 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
     open: boolean;
     editingRelation: CharacterRelation | null;
   }>({ open: false, editingRelation: null });
+
+  const searchParams = useSearchParams();
+  const characterParam = searchParams.get("character");
+  const processedParamRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!hydrated || !characterParam || processedParamRef.current === characterParam) return;
+
+    const entry = data.entries.find(
+      (e) =>
+        e.id === characterParam &&
+        e.projectId === projectId &&
+        e.type === "character",
+    );
+
+    if (entry) {
+      processedParamRef.current = characterParam;
+      setActiveType("character");
+      setSelectedEntryId(entry.id);
+      setPanelMode("view");
+      setActiveTag(null);
+      setSearchQuery("");
+      router.replace(`/project/${projectId}`);
+    }
+  }, [hydrated, characterParam, data.entries, projectId, router]);
 
   const project = getProject(projectId);
   const typeEntries = useMemo(
@@ -226,7 +251,11 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <TopBar project={project} />
+      <TopBar
+        project={project}
+        showRelationsLink
+        relationsHref={`/project/${projectId}/relationships`}
+      />
       <div className="flex min-h-0 flex-1">
         <Sidebar
           project={project}
@@ -234,6 +263,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
           onTypeChange={handleTypeChange}
           onCreateEntry={handleCreate}
           countByType={(type) => countEntriesByType(projectId, type)}
+          onNavigateToRelations={() => router.push(`/project/${projectId}/relationships`)}
         />
         <EntryList
           entries={entries}

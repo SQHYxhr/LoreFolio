@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { GitFork, Plus } from "lucide-react";
 import type { EntryType, Project } from "@/types";
 import { ENTRY_TYPE_ICONS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,7 @@ interface SidebarProps {
   onTypeChange: (type: EntryType) => void;
   onCreateEntry: () => void;
   countByType: (type: EntryType) => number;
+  onNavigateToRelations?: () => void;
 }
 
 export function Sidebar({
@@ -22,6 +23,7 @@ export function Sidebar({
   onTypeChange,
   onCreateEntry,
   countByType,
+  onNavigateToRelations,
 }: SidebarProps) {
   return (
     <aside className="flex h-full w-56 shrink-0 flex-col border-r border-border/80 bg-card/40">
@@ -58,6 +60,18 @@ export function Sidebar({
           })}
         </nav>
       </ScrollArea>
+      {onNavigateToRelations ? (
+        <div className="border-t border-border/80 px-2 py-2">
+          <button
+            type="button"
+            onClick={onNavigateToRelations}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <GitFork className="h-4 w-4" />
+            关系图谱
+          </button>
+        </div>
+      ) : null}
       <div className="border-t border-border/80 p-4">
         <Button className="w-full gap-2" onClick={onCreateEntry}>
           <Plus className="h-4 w-4" />
