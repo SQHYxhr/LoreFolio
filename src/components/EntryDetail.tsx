@@ -57,7 +57,7 @@ export function EntryDetail({
 
   if (!entry) {
     return (
-      <aside className="flex h-full w-[460px] shrink-0 flex-col bg-card/30">
+      <aside className="flex h-full w-full lg:w-[460px] shrink-0 flex-col bg-card/30">
         <EmptyState
           icon={BookMarked}
           title="选择一条设定"
@@ -95,7 +95,7 @@ export function EntryDetail({
 
   return (
     <>
-      <aside className="flex h-full w-[460px] shrink-0 flex-col bg-card/30">
+      <aside className="flex h-full w-full lg:w-[460px] shrink-0 flex-col bg-card/30">
         {entry.coverImage ? (
           <button
             type="button"

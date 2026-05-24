@@ -66,7 +66,7 @@ export function TagInput({ tags, onChange, placeholder = "输入标签后按 Ent
             if (input.trim()) addTag(input);
           }}
           placeholder={tags.length === 0 ? placeholder : ""}
-          className="h-7 min-w-[120px] flex-1 border-0 bg-transparent px-1 shadow-none focus-visible:ring-0"
+          className="h-7 min-w-[80px] flex-1 border-0 bg-transparent px-1 shadow-none focus-visible:ring-0"
         />
       </div>
       <p className="text-xs text-muted-foreground">按 Enter 或逗号添加，支持多个标签</p>

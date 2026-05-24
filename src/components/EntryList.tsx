@@ -42,7 +42,7 @@ export function EntryList({
   const totalInType = allEntriesForTags.length;
 
   return (
-    <section className="flex h-full min-w-0 flex-1 flex-col border-r border-border/80 bg-background/50">
+    <section className="flex h-full min-w-0 flex-1 flex-col lg:border-r border-border/80 bg-background/50">
       <div className="space-y-3 border-b border-border/80 px-4 py-3">
         <div className="flex items-center justify-between">
           <div>

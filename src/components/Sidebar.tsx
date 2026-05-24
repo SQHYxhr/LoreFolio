@@ -26,7 +26,7 @@ export function Sidebar({
   onNavigateToRelations,
 }: SidebarProps) {
   return (
-    <aside className="flex h-full w-56 shrink-0 flex-col border-r border-border/80 bg-card/40">
+    <aside className="hidden lg:flex h-full lg:w-56 shrink-0 flex-col border-r border-border/80 bg-card/40">
       <div className="p-4">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">当前世界</p>
         <h2 className="mt-1 font-serif text-lg font-semibold leading-tight">{project.name}</h2>
