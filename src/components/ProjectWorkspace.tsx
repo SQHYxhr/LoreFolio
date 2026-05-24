@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { CharacterRelation, Entry, EntryFormData, EntryType, RelationDirection, RelationStatus, RelationType } from "@/types";
+import { ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { filterEntries, getAllTags } from "@/lib/entry-filters";
+import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
 import { TopBar } from "@/components/TopBar";
 import { Sidebar } from "@/components/Sidebar";
@@ -46,6 +48,8 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
     open: boolean;
     editingRelation: CharacterRelation | null;
   }>({ open: false, editingRelation: null });
+
+  const [mobilePanel, setMobilePanel] = useState<"list" | "detail" | "edit">("list");
 
   const searchParams = useSearchParams();
   const characterParam = searchParams.get("character");
@@ -116,11 +120,13 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
     setSelectedEntryId(null);
     setPanelMode("view");
     setActiveTag(null);
+    setMobilePanel("list");
   }, []);
 
   const handleSelectEntry = useCallback((entry: Entry) => {
     setSelectedEntryId(entry.id);
     setPanelMode("view");
+    setMobilePanel("detail");
   }, []);
 
   const handleSelectRelated = useCallback((entry: Entry) => {
@@ -129,15 +135,18 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
     setPanelMode("view");
     setActiveTag(null);
     setSearchQuery("");
+    setMobilePanel("detail");
   }, []);
 
   const handleCreate = useCallback(() => {
     setSelectedEntryId(null);
     setPanelMode("create");
+    setMobilePanel("edit");
   }, []);
 
   const handleEdit = useCallback(() => {
     setPanelMode("edit");
+    setMobilePanel("edit");
   }, []);
 
   const handleSave = useCallback(
@@ -153,6 +162,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
         }
       }
       setPanelMode("view");
+      setMobilePanel("detail");
     },
     [panelMode, addEntry, projectId, selectedEntry, editEntry, activeType],
   );
@@ -163,11 +173,26 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
     removeEntry(selectedEntry.id);
     setSelectedEntryId(null);
     setPanelMode("view");
+    setMobilePanel("list");
   }, [selectedEntry, removeEntry]);
 
   const handleCancel = useCallback(() => {
     setPanelMode("view");
   }, []);
+
+  const handleMobileBack = useCallback(() => {
+    if (panelMode === "create") {
+      setPanelMode("view");
+      setSelectedEntryId(null);
+      setMobilePanel("list");
+    } else if (panelMode === "edit") {
+      setPanelMode("view");
+      setMobilePanel("detail");
+    } else {
+      setSelectedEntryId(null);
+      setMobilePanel("list");
+    }
+  }, [panelMode]);
 
   const handleAddRelation = useCallback(() => {
     setRelationDialog({ open: true, editingRelation: null });
@@ -222,6 +247,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
       setPanelMode("view");
       setActiveTag(null);
       setSearchQuery("");
+      setMobilePanel("detail");
     },
     [],
   );
@@ -250,13 +276,13 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex min-h-dvh lg:h-screen flex-col lg:overflow-hidden">
       <TopBar
         project={project}
         showRelationsLink
         relationsHref={`/project/${projectId}/relationships`}
       />
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <Sidebar
           project={project}
           activeType={activeType}
@@ -265,37 +291,101 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
           countByType={(type) => countEntriesByType(projectId, type)}
           onNavigateToRelations={() => router.push(`/project/${projectId}/relationships`)}
         />
-        <EntryList
-          entries={entries}
-          allEntriesForTags={typeEntries}
-          activeType={activeType}
-          selectedEntryId={selectedEntryId}
-          searchQuery={searchQuery}
-          activeTag={activeTag}
-          onSearchChange={setSearchQuery}
-          onTagChange={setActiveTag}
-          availableTags={availableTags}
-          onSelect={handleSelectEntry}
-          onCreate={handleCreate}
-        />
-        {panelMode === "view" ? (
-          <EntryDetail
-            entry={selectedEntry}
-            projectEntries={projectEntries}
-            relatedEntries={relatedEntries}
-            onEdit={handleEdit}
-            onSelectRelated={handleSelectRelated}
-            onSelectEntry={handleSelectRelated}
-            onTagClick={setActiveTag}
-            characterRelations={characterRelations}
-            allCharacterEntries={characterEntries}
-            onAddRelation={handleAddRelation}
-            onEditRelation={handleEditRelation}
-            onDeleteRelation={handleDeleteRelation}
-            onNavigateToCharacter={handleNavigateToCharacter}
+
+        <section
+          className={cn(
+            "flex min-h-0 flex-1 flex-col bg-background/50",
+            mobilePanel !== "list" && "hidden",
+            "lg:flex lg:border-r lg:border-border/80",
+          )}
+        >
+          <div className="flex items-center justify-between gap-2 border-b border-border/80 px-3 py-2 lg:hidden">
+            <select
+              value={activeType}
+              onChange={(e) => handleTypeChange(e.target.value as EntryType)}
+              className="h-8 rounded-lg border border-input bg-card px-2 text-sm font-medium"
+            >
+              {ENTRY_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {ENTRY_TYPE_LABELS[t]}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={handleCreate}
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-sm"
+            >
+              新建
+            </button>
+          </div>
+          <EntryList
+            entries={entries}
+            allEntriesForTags={typeEntries}
+            activeType={activeType}
+            selectedEntryId={selectedEntryId}
+            searchQuery={searchQuery}
+            activeTag={activeTag}
+            onSearchChange={setSearchQuery}
+            onTagChange={setActiveTag}
+            availableTags={availableTags}
+            onSelect={handleSelectEntry}
+            onCreate={handleCreate}
           />
-        ) : (
-          <aside className="flex h-full w-[460px] shrink-0 flex-col border-l border-border/80 bg-card/30">
+        </section>
+
+        <aside
+          className={cn(
+            "flex min-h-0 w-full lg:w-[460px] shrink-0 flex-col border-l border-border/80 bg-card/30",
+            mobilePanel === "list" && "hidden",
+            "lg:flex",
+          )}
+        >
+          <div className="flex items-center justify-between border-b border-border/80 px-3 py-2 lg:hidden">
+            <button
+              type="button"
+              onClick={handleMobileBack}
+              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+            >
+              ← 返回
+            </button>
+            {panelMode !== "view" ? (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (panelMode === "create") {
+                      setPanelMode("view");
+                      setMobilePanel("list");
+                    } else {
+                      setPanelMode("view");
+                      setMobilePanel("detail");
+                    }
+                  }}
+                  className="inline-flex h-8 items-center rounded-lg border border-border px-2.5 text-sm"
+                >
+                  取消
+                </button>
+              </div>
+            ) : null}
+          </div>
+          {panelMode === "view" ? (
+            <EntryDetail
+              entry={selectedEntry}
+              projectEntries={projectEntries}
+              relatedEntries={relatedEntries}
+              onEdit={handleEdit}
+              onSelectRelated={handleSelectRelated}
+              onSelectEntry={handleSelectRelated}
+              onTagClick={setActiveTag}
+              characterRelations={characterRelations}
+              allCharacterEntries={characterEntries}
+              onAddRelation={handleAddRelation}
+              onEditRelation={handleEditRelation}
+              onDeleteRelation={handleDeleteRelation}
+              onNavigateToCharacter={handleNavigateToCharacter}
+            />
+          ) : (
             <EntryEditor
               entry={panelMode === "edit" ? selectedEntry : null}
               defaultType={activeType}
@@ -305,8 +395,8 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
               onCancel={handleCancel}
               onDelete={panelMode === "edit" ? handleDelete : undefined}
             />
-          </aside>
-        )}
+          )}
+        </aside>
       </div>
 
       <CharacterRelationDialog

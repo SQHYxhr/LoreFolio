@@ -58,7 +58,7 @@ export function AliasesInput({ aliases, onChange }: AliasesInputProps) {
             if (input.trim()) addAlias(input);
           }}
           placeholder={aliases.length === 0 ? "输入别名后按 Enter" : ""}
-          className="h-7 min-w-[100px] flex-1 border-0 bg-transparent px-1 shadow-none focus-visible:ring-0"
+          className="h-7 min-w-[60px] flex-1 border-0 bg-transparent px-1 shadow-none focus-visible:ring-0"
         />
       </div>
     </div>

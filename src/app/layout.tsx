@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 
@@ -16,6 +16,11 @@ const notoSerif = Noto_Serif_SC({
 export const metadata: Metadata = {
   title: "设定档案馆 · 世界观与 OC 管理",
   description: "集中整理世界观、角色与设定条目的创作工具",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

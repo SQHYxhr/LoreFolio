@@ -133,7 +133,7 @@ export function CharacterDetail({
 
   return (
     <>
-      <aside className="flex h-full w-[460px] shrink-0 flex-col bg-card/30">
+      <aside className="flex h-full w-full lg:w-[460px] shrink-0 flex-col bg-card/30">
         {entry.coverImage ? (
           <button
             type="button"

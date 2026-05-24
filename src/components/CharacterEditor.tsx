@@ -89,7 +89,7 @@ export function CharacterEditor({ form, setForm, entry, projectEntries }: Charac
             rows={2}
           />
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label htmlFor="char-pronouns">代称</Label>
             <Input
@@ -109,7 +109,7 @@ export function CharacterEditor({ form, setForm, entry, projectEntries }: Charac
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label htmlFor="char-gender">性别</Label>
             <Input

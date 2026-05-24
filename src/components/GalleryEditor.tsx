@@ -55,7 +55,7 @@ export function GalleryEditor({ images, imageAltMap = {}, onChange }: GalleryEdi
       <p className="text-xs text-muted-foreground">为条目添加多张参考图、立绘或场景图</p>
 
       {images.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {images.map((src) => (
             <div key={src} className="overflow-hidden rounded-lg border border-border/80 bg-card">
               {/* eslint-disable-next-line @next/next/no-img-element */}
