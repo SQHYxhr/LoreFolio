@@ -35,7 +35,7 @@ export function RelationshipGraphPanel({
   if (!selectedNode && !selectedEdgeData) return null;
 
   return (
-    <aside className="flex h-full w-[380px] shrink-0 flex-col border-l border-border/80 bg-card/30">
+    <div className="flex h-full flex-col bg-card/30">
       <div className="flex items-center justify-between border-b border-border/80 px-4 py-3">
         <h3 className="font-serif text-sm font-semibold">
           {selectedNode ? "角色信息" : "关系详情"}
@@ -43,10 +43,10 @@ export function RelationshipGraphPanel({
         <button
           type="button"
           onClick={onClose}
-          className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
           aria-label="关闭"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
       </div>
 
@@ -163,6 +163,6 @@ export function RelationshipGraphPanel({
           </div>
         ) : null}
       </ScrollArea>
-    </aside>
+    </div>
   );
 }
