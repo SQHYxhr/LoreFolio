@@ -151,6 +151,8 @@ export function RelationshipGraphView({ projectId }: RelationshipGraphViewProps)
     );
   }
 
+  const hasSelection = Boolean(selectedNodeId || selectedEdgeId);
+
   if (!project) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
@@ -167,7 +169,7 @@ export function RelationshipGraphView({ projectId }: RelationshipGraphViewProps)
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-dvh flex-col overflow-hidden lg:h-screen">
       <TopBar
         project={project}
         backHref={`/project/${projectId}`}
@@ -175,7 +177,7 @@ export function RelationshipGraphView({ projectId }: RelationshipGraphViewProps)
       />
 
       {characterEntries.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex flex-1 items-center justify-center px-4">
           <EmptyState
             icon={GitFork}
             title="该项目还没有角色条目"
@@ -187,10 +189,10 @@ export function RelationshipGraphView({ projectId }: RelationshipGraphViewProps)
         </div>
       ) : allRelations.length === 0 ? (
         <div className="flex min-h-0 flex-1 flex-col">
-          <div className="border-b border-border/80 bg-amber-50/40 px-4 py-2.5 text-center text-sm text-muted-foreground">
+          <div className="shrink-0 border-b border-border/80 bg-amber-50/40 px-4 py-2 text-center text-sm text-muted-foreground">
             角色之间暂无关系记录。在角色详情页中添加关系后，将在此处显示关系连线。
           </div>
-          <div className="flex min-h-0 flex-1 flex-col">
+          <div className="shrink-0">
             <RelationshipGraphControls
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -199,6 +201,8 @@ export function RelationshipGraphView({ projectId }: RelationshipGraphViewProps)
               hideIsolated={hideIsolated}
               onHideIsolatedChange={setHideIsolated}
             />
+          </div>
+          <div className="min-h-0 flex-1 overflow-hidden">
             <RelationshipGraphCanvas
               characterEntries={characterEntries}
               allRelations={allRelations}
@@ -211,49 +215,68 @@ export function RelationshipGraphView({ projectId }: RelationshipGraphViewProps)
           </div>
         </div>
       ) : (
-        <div className="flex min-h-0 flex-1">
-          <div className="flex min-h-0 flex-1 flex-col">
-            <RelationshipGraphControls
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              relationTypeFilter={relationTypeFilter}
-              onRelationTypeFilterChange={setRelationTypeFilter}
-              hideIsolated={hideIsolated}
-              onHideIsolatedChange={setHideIsolated}
-            />
-            {filteredEntryIds.size === 0 ? (
-              <div className="flex flex-1 items-center justify-center">
-                <EmptyState
-                  icon={GitFork}
-                  title="没有匹配的角色或关系"
-                  description="试试调整搜索词或清除筛选条件。"
-                  action={
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setSearchQuery("");
-                        setRelationTypeFilter(null);
-                        setHideIsolated(false);
-                      }}
-                    >
-                      清除筛选
-                    </Button>
-                  }
-                />
-              </div>
-            ) : (
-              <RelationshipGraphCanvas
-                characterEntries={characterEntries}
-                allRelations={allRelations}
-                filteredEntryIds={filteredEntryIds}
-                filteredRelations={filteredRelations}
-                onNodeClick={handleNodeClick}
-                onEdgeClick={handleEdgeClick}
-                onPaneClick={handlePaneClick}
+        <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <div className="shrink-0">
+              <RelationshipGraphControls
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                relationTypeFilter={relationTypeFilter}
+                onRelationTypeFilterChange={setRelationTypeFilter}
+                hideIsolated={hideIsolated}
+                onHideIsolatedChange={setHideIsolated}
               />
-            )}
+            </div>
+            <div className="min-h-0 flex-1 overflow-hidden">
+              {filteredEntryIds.size === 0 ? (
+                <div className="flex h-full items-center justify-center px-4">
+                  <EmptyState
+                    icon={GitFork}
+                    title="没有匹配的角色或关系"
+                    description="试试调整搜索词或清除筛选条件。"
+                    action={
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setRelationTypeFilter(null);
+                          setHideIsolated(false);
+                        }}
+                      >
+                        清除筛选
+                      </Button>
+                    }
+                  />
+                </div>
+              ) : (
+                <RelationshipGraphCanvas
+                  characterEntries={characterEntries}
+                  allRelations={allRelations}
+                  filteredEntryIds={filteredEntryIds}
+                  filteredRelations={filteredRelations}
+                  onNodeClick={handleNodeClick}
+                  onEdgeClick={handleEdgeClick}
+                  onPaneClick={handlePaneClick}
+                />
+              )}
+            </div>
           </div>
 
+          {hasSelection && (
+            <aside className="hidden lg:flex h-full w-[380px] shrink-0 flex-col border-l border-border/80 bg-card/30">
+              <RelationshipGraphPanel
+                selectedNode={selectedNode}
+                selectedEdgeData={selectedEdgeData}
+                onClose={handleClosePanel}
+                onNavigateToCharacter={handleNavigateToCharacter}
+              />
+            </aside>
+          )}
+        </div>
+      )}
+
+      {hasSelection && (
+        <div className="fixed inset-0 z-20 flex flex-col bg-card lg:hidden">
           <RelationshipGraphPanel
             selectedNode={selectedNode}
             selectedEdgeData={selectedEdgeData}

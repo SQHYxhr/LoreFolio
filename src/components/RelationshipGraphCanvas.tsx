@@ -144,8 +144,9 @@ export function RelationshipGraphCanvas({
   );
 
   return (
-    <div className="flex-1 min-h-0">
+    <div className="relative h-full min-h-0 w-full overflow-hidden [touch-action:none]">
       <ReactFlow
+        className="h-full w-full"
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -160,6 +161,10 @@ export function RelationshipGraphCanvas({
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={true}
+        panOnDrag
+        panOnScroll
+        zoomOnPinch
+        zoomOnScroll
         proOptions={{ hideAttribution: true }}
         style={{ background: "var(--xy-background-color, hsl(var(--background)))" }}
       >
