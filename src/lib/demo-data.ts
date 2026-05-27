@@ -11,6 +11,7 @@ const DEMO_ENTRY_IDS = {
   event: "demo-entry-frostline",
   species: "demo-entry-fox",
   note: "demo-entry-memo",
+  observatory: "demo-entry-observatory",
 } as const;
 
 const DEMO_IMAGES = {
@@ -64,6 +65,7 @@ export function createDemoData(): AppData {
           DEMO_ENTRY_IDS.location,
           DEMO_ENTRY_IDS.item,
           DEMO_ENTRY_IDS.lore,
+          DEMO_ENTRY_IDS.observatory,
         ],
         characterProfile: {
           displayName: "林晚星",
@@ -109,7 +111,59 @@ export function createDemoData(): AppData {
         isFavorite: false,
         isPinned: false,
         tags: ["学院", "浮空岛"],
-        relatedEntryIds: [DEMO_ENTRY_IDS.character, DEMO_ENTRY_IDS.faction],
+        relatedEntryIds: [DEMO_ENTRY_IDS.character, DEMO_ENTRY_IDS.faction, DEMO_ENTRY_IDS.observatory],
+        locationProfile: {
+          locationCategory: "academy",
+          status: "active",
+          parentLocationId: "",
+          governingFactionId: DEMO_ENTRY_IDS.faction,
+          environment:
+            "学院建在主浮空岛「苍岚」东缘，环形回廊常年被高空气流与星尘微光包围。白昼能俯瞰云海，夜晚则能直接观测星落轨迹。",
+          landmarks:
+            "中央观星台：用于观测星落与绘制星图的高塔。\n环形回廊：连接教学区、宿舍与藏书区的三层廊桥。\n地底封存库：传说保存着第一次星落时坠落的未知碎片。",
+          history:
+            "星落学院由第一批星象学者建立，最初只是观测站，后来逐渐发展为符文学与星象学并重的古老学府。\n\n学院曾长期只招收贵族学生，近几十年才开始破格接收具有特殊天赋的平民。",
+          access:
+            "正式学生、导师与获准访客可进入学院主体区域。中央观星台夜间需要预约，地底封存库仅对少数导师开放。\n\n星落期间学院会进入临时封闭状态，外来人员不得随意进出。",
+          creatorNotes:
+            "这个地点承担第一卷的主要舞台功能：既是安全的学习场所，也是阶级差异、知识垄断与星落秘密逐渐浮现的核心空间。",
+        },
+      },
+      {
+        id: DEMO_ENTRY_IDS.observatory,
+        projectId: DEMO_PROJECT_ID,
+        type: "location",
+        title: "中央观星台",
+        summary: "星落学院内部用于观测星落与绘制星图的高塔，也是林晚星最常独处的角落。",
+        content: "",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["学院", "观星台", "星落"],
+        relatedEntryIds: [
+          DEMO_ENTRY_IDS.location,
+          DEMO_ENTRY_IDS.character,
+          DEMO_ENTRY_IDS.lore,
+        ],
+        locationProfile: {
+          locationCategory: "building",
+          status: "active",
+          parentLocationId: DEMO_ENTRY_IDS.location,
+          governingFactionId: DEMO_ENTRY_IDS.faction,
+          environment:
+            "观星台位于学院三层环形建筑的正中央，塔顶四周没有遮挡，夜晚能看见星尘沿透明穹顶缓慢流动。",
+          landmarks:
+            "主观测镜：能够捕捉星落前的微弱轨迹。\n星图地板：镶嵌着历代学徒修正过的星象线。\n静默阶梯：通往塔顶的螺旋石阶，传说会吸收脚步声。",
+          history:
+            "中央观星台是学院最早建成的部分。历代星象学者都曾在这里记录星落周期，许多被封存的星落预言也源自此处。",
+          access:
+            "白天向学生开放，夜间观测需要导师许可。星落前后三日，观星台由学院与守序会共同监管。",
+          creatorNotes:
+            "可以作为林晚星独处、发现异常星图、触发关键线索的常用场景。",
+        },
       },
       {
         id: DEMO_ENTRY_IDS.faction,
