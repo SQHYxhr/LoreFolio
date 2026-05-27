@@ -1,8 +1,11 @@
 "use client";
 
-import { Library } from "lucide-react";
+import { useCallback, useState } from "react";
+import { Download, Library } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/hooks/use-store";
+import { downloadBackup } from "@/lib/backup";
+import { Button } from "@/components/ui/button";
 import { TopBar } from "@/components/TopBar";
 import { ProjectCard } from "@/components/ProjectCard";
 import { CreateProjectDialog } from "@/components/CreateProjectDialog";
@@ -11,11 +14,25 @@ import { EmptyState } from "@/components/EmptyState";
 export default function HomePage() {
   const router = useRouter();
   const { hydrated, projects, data, addProject } = useStore();
+  const [exported, setExported] = useState(false);
+  const [exportError, setExportError] = useState("");
 
   const handleCreate = (input: { name: string; description: string }) => {
     const project = addProject(input);
     router.push(`/project/${project.id}`);
   };
+
+  const handleExport = useCallback(() => {
+    setExportError("");
+    try {
+      downloadBackup(data);
+      setExported(true);
+      setTimeout(() => setExported(false), 2000);
+    } catch (e) {
+      console.error(e);
+      setExportError("导出失败，请稍后重试。");
+    }
+  }, [data]);
 
   if (!hydrated) {
     return (
@@ -37,7 +54,24 @@ export default function HomePage() {
               集中整理角色、地点、组织与世界观设定。选择一个世界进入，或创建新的档案空间。
             </p>
           </div>
-          <CreateProjectDialog onCreate={handleCreate} />
+          <div className="flex flex-col items-end gap-1.5">
+            <div className="flex items-center gap-2">
+              <CreateProjectDialog onCreate={handleCreate} />
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                onClick={handleExport}
+                disabled={exported}
+              >
+                <Download className="h-3.5 w-3.5" />
+                {exported ? "已导出" : "导出数据"}
+              </Button>
+            </div>
+            {exportError ? (
+              <p className="text-xs text-destructive">{exportError}</p>
+            ) : null}
+          </div>
         </section>
 
         {projects.length === 0 ? (
