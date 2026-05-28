@@ -271,8 +271,13 @@ export function createDemoData(): AppData {
   };
 }
 
+export const DEMO_INIT_KEY = "world-archive-demo-initialized";
+
 export function seedIfEmpty(data: AppData): AppData {
   if (data.projects.length === 0 && data.entries.length === 0) {
+    if (typeof window === "undefined") return data;
+    if (localStorage.getItem(DEMO_INIT_KEY)) return data;
+    localStorage.setItem(DEMO_INIT_KEY, "1");
     return createDemoData();
   }
   return data;
