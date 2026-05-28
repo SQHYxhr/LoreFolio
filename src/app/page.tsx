@@ -14,7 +14,7 @@ import { EmptyState } from "@/components/EmptyState";
 
 export default function HomePage() {
   const router = useRouter();
-  const { hydrated, projects, data, addProject, replaceData } = useStore();
+  const { hydrated, projects, data, storageError, addProject, replaceData } = useStore();
   const fileRef = useRef<HTMLInputElement>(null);
   const [exported, setExported] = useState(false);
   const [exportError, setExportError] = useState("");
@@ -109,6 +109,12 @@ export default function HomePage() {
       />
 
       <main className="mx-auto max-w-6xl px-6 py-10">
+        {storageError ? (
+          <section className="mb-10 rounded-xl border border-destructive/40 bg-destructive/5 p-5">
+            <p className="text-sm leading-relaxed text-destructive">{storageError}</p>
+          </section>
+        ) : null}
+
         <section className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-sm text-primary">世界观 · OC · 设定手帐</p>
@@ -119,7 +125,7 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col items-end gap-1.5">
             <div className="flex items-center gap-2">
-              <CreateProjectDialog onCreate={handleCreate} />
+              {!storageError ? <CreateProjectDialog onCreate={handleCreate} /> : null}
               <Button
                 variant="outline"
                 size="sm"
@@ -203,12 +209,20 @@ export default function HomePage() {
         </section>
 
         {projects.length === 0 ? (
-          <EmptyState
-            icon={Library}
-            title="还没有任何世界"
-            description="创建你的第一个世界项目，开始整理 OC 与设定吧。"
-            action={<CreateProjectDialog onCreate={handleCreate} />}
-          />
+          storageError ? (
+            <EmptyState
+              icon={Library}
+              title="无法加载本地数据"
+              description="请通过上方「检查备份文件」选择并导入此前导出的备份文件恢复数据。"
+            />
+          ) : (
+            <EmptyState
+              icon={Library}
+              title="还没有任何世界"
+              description="创建你的第一个世界项目，开始整理 OC 与设定吧。"
+              action={<CreateProjectDialog onCreate={handleCreate} />}
+            />
+          )
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (

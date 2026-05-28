@@ -12,7 +12,7 @@ import {
   deleteEntry,
   deleteProject,
   getCharacterRelations,
-  loadData,
+  loadDataSafe,
   saveData,
   updateCharacterRelation,
   updateEntry,
@@ -22,9 +22,17 @@ import {
 export function useStore() {
   const [data, setData] = useState<AppData>(createEmptyData);
   const [hydrated, setHydrated] = useState(false);
+  const [storageError, setStorageError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loaded = seedIfEmpty(loadData());
+    const result = loadDataSafe();
+    if (!result.ok) {
+      setData(createEmptyData());
+      setStorageError(result.error);
+      setHydrated(true);
+      return;
+    }
+    const loaded = seedIfEmpty(result.data);
     setData(loaded);
     saveData(loaded);
     setHydrated(true);
@@ -38,6 +46,7 @@ export function useStore() {
   const replaceData = useCallback((nextData: AppData) => {
     saveData(nextData);
     setData(nextData);
+    setStorageError(null);
   }, []);
 
   const addProject = useCallback(
@@ -163,6 +172,7 @@ export function useStore() {
   return {
     data,
     hydrated,
+    storageError,
     projects: data.projects,
     replaceData,
     addProject,

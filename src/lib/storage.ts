@@ -39,6 +39,58 @@ export function saveData(data: AppData): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+export type LoadDataResult =
+  | { ok: true; data: AppData }
+  | { ok: false; error: string; raw: string };
+
+export function loadDataSafe(): LoadDataResult {
+  if (typeof window === "undefined") {
+    return { ok: true, data: createEmptyData() };
+  }
+
+  let raw: string | null = null;
+
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      const legacy = loadLegacyData();
+      if (legacy) {
+        saveData(legacy);
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        return { ok: true, data: legacy };
+      }
+      return { ok: true, data: createEmptyData() };
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return {
+        ok: false,
+        error: "本地数据读取失败。数据格式已损坏（JSON 解析错误），为避免覆盖你的原始资料，设定档案馆已停止自动保存。请导入此前导出的备份文件恢复数据。",
+        raw,
+      };
+    }
+
+    try {
+      return { ok: true, data: migrateData(parsed) };
+    } catch {
+      return {
+        ok: false,
+        error: "本地数据读取失败。数据结构不兼容，无法完成迁移，为避免覆盖你的原始资料，设定档案馆已停止自动保存。请导入此前导出的备份文件恢复数据。",
+        raw,
+      };
+    }
+  } catch {
+    return {
+      ok: false,
+      error: "本地数据读取失败。为避免覆盖你的原始资料，设定档案馆已停止自动保存当前空数据。请导入此前导出的备份文件恢复数据。",
+      raw: raw ?? "",
+    };
+  }
+}
+
 type EntryInput = Pick<
   Entry,
   | "type"
