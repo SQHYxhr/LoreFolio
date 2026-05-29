@@ -17,6 +17,7 @@ import { RelatedEntries } from "@/components/RelatedEntries";
 import { CharacterDetail } from "@/components/CharacterDetail";
 import { LocationDetail } from "@/components/LocationDetail";
 import { FactionDetail } from "@/components/FactionDetail";
+import { ItemDetail } from "@/components/ItemDetail";
 import { createEmptyCharacterProfile } from "@/lib/character-profile";
 import { cn } from "@/lib/utils";
 
@@ -108,6 +109,20 @@ export function EntryDetail({
   if (entry.type === "faction") {
     return (
       <FactionDetail
+        entry={entry}
+        projectEntries={projectEntries}
+        relatedEntries={relatedEntries}
+        onEdit={onEdit}
+        onSelectRelated={onSelectRelated}
+        onSelectEntry={onSelectEntry}
+        onTagClick={onTagClick}
+      />
+    );
+  }
+
+  if (entry.type === "item") {
+    return (
+      <ItemDetail
         entry={entry}
         projectEntries={projectEntries}
         relatedEntries={relatedEntries}
