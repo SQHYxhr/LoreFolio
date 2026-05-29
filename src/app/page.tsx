@@ -73,20 +73,23 @@ export default function HomePage() {
 
     if (
       !window.confirm(
-        `导入备份会覆盖当前浏览器中的所有世界、条目和角色关系。此操作不可撤销，建议先导出当前数据备份。是否继续？${warningNote}`,
+        `导入备份会覆盖当前浏览器中的所有世界、条目和角色关系。确认后将先自动下载一份导入前备份，再执行导入。此操作不可撤销，是否继续？${warningNote}`,
       )
     ) {
       return;
     }
 
     try {
+      if (!storageError) {
+        downloadBackup(data, { prefix: "before-import" });
+      }
       replaceData(checkResult.payload.data);
       setImportStatus("success");
     } catch (e) {
       console.error(e);
       setImportStatus("error");
     }
-  }, [checkResult, replaceData]);
+  }, [checkResult, data, storageError, replaceData]);
 
   if (!hydrated) {
     return (

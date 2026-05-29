@@ -17,14 +17,16 @@ export function createBackupPayload(data: AppData): BackupPayload {
   };
 }
 
-export function downloadBackup(data: AppData): void {
+export function downloadBackup(data: AppData, options?: { prefix?: string }): void {
   const payload = createBackupPayload(data);
   const json = JSON.stringify(payload, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
   const today = new Date().toISOString().slice(0, 10);
-  const filename = `world-archive-backup-${today}.json`;
+  const filename = options?.prefix
+    ? `world-archive-${options.prefix}-${today}.json`
+    : `world-archive-backup-${today}.json`;
 
   const anchor = document.createElement("a");
   anchor.href = url;
