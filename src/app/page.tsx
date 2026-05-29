@@ -125,8 +125,14 @@ export default function HomePage() {
             <p className="mt-2 max-w-xl text-muted-foreground">
               集中整理角色、地点、组织与世界观设定。选择一个世界进入，或创建新的档案空间。
             </p>
+            <p className="mt-1.5 max-w-xl text-xs text-muted-foreground/70">
+              设定数据保存在当前浏览器中，不会上传到任何服务器。建议定期导出备份，避免浏览器数据清理后丢失。
+            </p>
           </div>
           <div className="flex flex-col items-end gap-1.5">
+            <p className="max-w-xs text-right text-xs text-muted-foreground/70">
+              导出 JSON 文件可用于备份或迁移到其他浏览器。导入备份会覆盖现有数据，导入前将自动下载一份当前数据的备份。
+            </p>
             <div className="flex items-center gap-2">
               {!storageError ? <CreateProjectDialog onCreate={handleCreate} /> : null}
               <Button
@@ -222,12 +228,16 @@ export default function HomePage() {
             <EmptyState
               icon={Library}
               title="还没有任何世界"
-              description="创建你的第一个世界项目，开始整理 OC 与设定吧。"
+              description="创建你的第一个项目，开始整理角色、地点、组织与物品设定吧。"
               action={<CreateProjectDialog onCreate={handleCreate} />}
             />
           )
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <>
+            <p className="mb-4 text-xs text-muted-foreground/70">
+              首次访问会提供一个示例世界，用来展示角色、地点、组织与物品档案。你可以自由修改或删除它。
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}
@@ -236,6 +246,7 @@ export default function HomePage() {
               />
             ))}
           </div>
+          </>
         )}
       </main>
     </div>
