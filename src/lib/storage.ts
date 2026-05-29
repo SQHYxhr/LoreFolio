@@ -1,6 +1,7 @@
 import type { AppData, CharacterRelation, Entry, EntryType, Project } from "@/types";
 import { normalizeLocationProfile } from "@/lib/location-profile";
 import { normalizeFactionProfile } from "@/lib/faction-profile";
+import { normalizeItemProfile } from "@/lib/item-profile";
 import { normalizeTags } from "@/lib/entry-filters";
 import { migrateData, loadLegacyData, STORAGE_KEY, LEGACY_STORAGE_KEY, normalizeEntry, normalizeCharacterRelation } from "@/lib/migrate";
 import { generateId } from "@/lib/utils";
@@ -108,6 +109,7 @@ type EntryInput = Pick<
   | "characterProfile"
   | "locationProfile"
   | "factionProfile"
+  | "itemProfile"
 >;
 
 function buildEntryFields(input: EntryInput) {
@@ -146,6 +148,13 @@ function buildEntryFields(input: EntryInput) {
     };
   }
 
+  if (input.type === "item" && input.itemProfile) {
+    return {
+      ...fields,
+      itemProfile: normalizeItemProfile(input.itemProfile),
+    };
+  }
+
   return fields;
 }
 
@@ -167,6 +176,9 @@ function clearStructuredReferences(
       if (e.type === "faction" && e.factionProfile?.headquartersLocationId === entryId) {
         return { ...e, factionProfile: { ...e.factionProfile, headquartersLocationId: "" } };
       }
+      if (e.type === "item" && e.itemProfile?.currentLocationId === entryId) {
+        return { ...e, itemProfile: { ...e.itemProfile, currentLocationId: "" } };
+      }
       return e;
     });
   }
@@ -182,6 +194,9 @@ function clearStructuredReferences(
       if (e.type === "faction" && e.factionProfile?.parentFactionId === entryId) {
         return { ...e, factionProfile: { ...e.factionProfile, parentFactionId: "" } };
       }
+      if (e.type === "item" && e.itemProfile?.creatorFactionId === entryId) {
+        return { ...e, itemProfile: { ...e.itemProfile, creatorFactionId: "" } };
+      }
       return e;
     });
   }
@@ -196,6 +211,12 @@ function clearStructuredReferences(
   }
 
   if (oldType === "character") {
+    entries = entries.map((e) => {
+      if (e.type === "item" && e.itemProfile?.ownerCharacterId === entryId) {
+        return { ...e, itemProfile: { ...e.itemProfile, ownerCharacterId: "" } };
+      }
+      return e;
+    });
     characterRelations = characterRelations.filter(
       (r) => r.fromCharacterId !== entryId && r.toCharacterId !== entryId,
     );

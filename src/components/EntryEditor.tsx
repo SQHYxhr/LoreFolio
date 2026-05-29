@@ -6,6 +6,7 @@ import type { Entry, EntryFormData, EntryType } from "@/types";
 import { createEmptyCharacterProfile } from "@/lib/character-profile";
 import { createEmptyLocationProfile, wouldCreateLocationCycle } from "@/lib/location-profile";
 import { createEmptyFactionProfile, wouldCreateFactionCycle } from "@/lib/faction-profile";
+import { createEmptyItemProfile } from "@/lib/item-profile";
 import { ENTRY_IMAGE_FIELDS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +55,7 @@ const emptyForm = (type: EntryType): EntryFormData => ({
   ...(type === "character" ? { characterProfile: createEmptyCharacterProfile() } : {}),
   ...(type === "location" ? { locationProfile: createEmptyLocationProfile() } : {}),
   ...(type === "faction" ? { factionProfile: createEmptyFactionProfile() } : {}),
+  ...(type === "item" ? { itemProfile: createEmptyItemProfile() } : {}),
 });
 
 export function EntryEditor({
@@ -101,6 +103,12 @@ export function EntryEditor({
               ? { ...entry.factionProfile }
               : createEmptyFactionProfile()
             : undefined,
+        itemProfile:
+          entry.type === "item"
+            ? entry.itemProfile
+              ? { ...entry.itemProfile }
+              : createEmptyItemProfile()
+            : undefined,
       });
     } else {
       setForm(emptyForm(defaultType));
@@ -119,6 +127,9 @@ export function EntryEditor({
         : {}),
       ...(newType === "faction" && !prev.factionProfile
         ? { factionProfile: createEmptyFactionProfile() }
+        : {}),
+      ...(newType === "item" && !prev.itemProfile
+        ? { itemProfile: createEmptyItemProfile() }
         : {}),
     }));
   };
@@ -187,6 +198,11 @@ export function EntryEditor({
       onSave({
         ...form,
         factionProfile: form.factionProfile ?? createEmptyFactionProfile(),
+      });
+    } else if (form.type === "item") {
+      onSave({
+        ...form,
+        itemProfile: form.itemProfile ?? createEmptyItemProfile(),
       });
     } else {
       onSave({
