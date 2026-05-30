@@ -268,6 +268,73 @@ export interface ItemProfile {
   creatorNotes: string;
 }
 
+// ── 事件结构化档案 ──────────────────────────────────────────
+
+export const EVENT_CATEGORIES = [
+  "battle",
+  "conflict",
+  "political",
+  "disaster",
+  "discovery",
+  "ceremony",
+  "crime",
+  "personal",
+  "supernatural",
+  "other",
+] as const;
+
+export type EventCategory = "" | (typeof EVENT_CATEGORIES)[number];
+
+export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
+  "": "未选择",
+  battle: "战争 / 战役",
+  conflict: "冲突 / 争端",
+  political: "政治事件",
+  disaster: "灾难",
+  discovery: "发现 / 探索",
+  ceremony: "仪式 / 庆典",
+  crime: "犯罪 / 审判",
+  personal: "个人事件",
+  supernatural: "超自然事件",
+  other: "其他",
+};
+
+export const EVENT_STATUSES = [
+  "ongoing",
+  "concluded",
+  "aborted",
+  "unknown",
+] as const;
+
+export type EventStatus = "" | (typeof EVENT_STATUSES)[number];
+
+export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
+  "": "未选择",
+  ongoing: "进行中",
+  concluded: "已结束",
+  aborted: "中止 / 未发生",
+  unknown: "未知",
+};
+
+export interface EventProfile {
+  eventCategory: EventCategory;
+  status: EventStatus;
+  chronology: string;
+  startDateText: string;
+  endDateText: string;
+  locationId: string;
+  primaryFactionId: string;
+  participantCharacterIds: string[];
+  involvedFactionIds: string[];
+  relatedItemIds: string[];
+  cause: string;
+  process: string;
+  result: string;
+  impact: string;
+  aftermath: string;
+  creatorNotes: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -300,6 +367,8 @@ export interface Entry {
   factionProfile?: FactionProfile;
   /** 物品 / 道具结构化档案；仅 type === "item" 时有效 */
   itemProfile?: ItemProfile;
+  /** 事件结构化档案；仅 type === "event" 时有效 */
+  eventProfile?: EventProfile;
 }
 
 export interface AppData {
@@ -358,6 +427,7 @@ export type EntryFormData = Pick<
   | "locationProfile"
   | "factionProfile"
   | "itemProfile"
+  | "eventProfile"
 >;
 
 export type ProjectFormData = Pick<Project, "name" | "description">;
