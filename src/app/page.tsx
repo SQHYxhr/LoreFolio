@@ -14,7 +14,7 @@ import { EmptyState } from "@/components/EmptyState";
 
 export default function HomePage() {
   const router = useRouter();
-  const { hydrated, projects, data, storageError, addProject, replaceData } = useStore();
+  const { hydrated, projects, data, storageError, addProject, removeProject, replaceData } = useStore();
   const fileRef = useRef<HTMLInputElement>(null);
   const [exported, setExported] = useState(false);
   const [exportError, setExportError] = useState("");
@@ -25,6 +25,32 @@ export default function HomePage() {
     const project = addProject(input);
     router.push(`/project/${project.id}`);
   };
+
+  const handleDelete = useCallback(
+    (project: { id: string; name: string }) => {
+      if (
+        !window.confirm(
+          `确定删除世界「${project.name}」吗？\n\n` +
+            `此操作将删除该世界下的所有设定条目和角色关系，且不可撤销。\n\n` +
+            `确认后将先自动下载一份完整数据备份，再执行删除。\n` +
+            `取消则不会进行任何操作。`,
+        )
+      ) {
+        return;
+      }
+
+      try {
+        downloadBackup(data, { prefix: "before-delete-project" });
+      } catch (e) {
+        console.error(e);
+        window.alert("自动备份失败，删除操作已取消。请手动导出数据后重试。");
+        return;
+      }
+
+      removeProject(project.id);
+    },
+    [data, removeProject],
+  );
 
   const handleExport = useCallback(() => {
     setExportError("");
@@ -243,6 +269,7 @@ export default function HomePage() {
                 key={project.id}
                 project={project}
                 entryCount={data.entries.filter((e) => e.projectId === project.id).length}
+                onDelete={handleDelete}
               />
             ))}
           </div>

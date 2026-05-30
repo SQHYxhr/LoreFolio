@@ -261,9 +261,56 @@ export function updateProject(
 }
 
 export function deleteProject(data: AppData, projectId: string): AppData {
+  // Collect IDs of entries being deleted so we can clean up cross-references
+  const deletedEntryIds = new Set(
+    data.entries.filter((e) => e.projectId === projectId).map((e) => e.id),
+  );
+
+  // Remove the project, its entries, and its character-relations
+  const remainingEntries = data.entries.filter((e) => e.projectId !== projectId);
+
+  // Clean up relatedEntryIds in remaining entries
+  const cleanedEntries = remainingEntries.map((e) => {
+    const filteredRelated = e.relatedEntryIds.filter((id) => !deletedEntryIds.has(id));
+    const entry: Entry = { ...e, relatedEntryIds: filteredRelated };
+
+    // Clean up structured profile references pointing to deleted entries
+    if (e.characterProfile) {
+      const cp = { ...e.characterProfile };
+      if (cp.factionId && deletedEntryIds.has(cp.factionId)) cp.factionId = "";
+      if (cp.locationId && deletedEntryIds.has(cp.locationId)) cp.locationId = "";
+      if (cp.speciesId && deletedEntryIds.has(cp.speciesId)) cp.speciesId = "";
+      entry.characterProfile = cp;
+    }
+
+    if (e.locationProfile) {
+      const lp = { ...e.locationProfile };
+      if (lp.parentLocationId && deletedEntryIds.has(lp.parentLocationId)) lp.parentLocationId = "";
+      if (lp.governingFactionId && deletedEntryIds.has(lp.governingFactionId)) lp.governingFactionId = "";
+      entry.locationProfile = lp;
+    }
+
+    if (e.factionProfile) {
+      const fp = { ...e.factionProfile };
+      if (fp.parentFactionId && deletedEntryIds.has(fp.parentFactionId)) fp.parentFactionId = "";
+      if (fp.headquartersLocationId && deletedEntryIds.has(fp.headquartersLocationId)) fp.headquartersLocationId = "";
+      entry.factionProfile = fp;
+    }
+
+    if (e.itemProfile) {
+      const ip = { ...e.itemProfile };
+      if (ip.ownerCharacterId && deletedEntryIds.has(ip.ownerCharacterId)) ip.ownerCharacterId = "";
+      if (ip.currentLocationId && deletedEntryIds.has(ip.currentLocationId)) ip.currentLocationId = "";
+      if (ip.creatorFactionId && deletedEntryIds.has(ip.creatorFactionId)) ip.creatorFactionId = "";
+      entry.itemProfile = ip;
+    }
+
+    return entry;
+  });
+
   return {
     projects: data.projects.filter((p) => p.id !== projectId),
-    entries: data.entries.filter((e) => e.projectId !== projectId),
+    entries: cleanedEntries,
     characterRelations: data.characterRelations.filter((r) => r.projectId !== projectId),
   };
 }
