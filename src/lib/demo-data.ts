@@ -310,6 +310,29 @@ export function createDemoData(): AppData {
         isPinned: false,
         tags: ["生物", "浮空岛"],
         relatedEntryIds: [DEMO_ENTRY_IDS.location],
+        speciesProfile: {
+          speciesCategory: "animal",
+          status: "rare",
+          habitatLocationId: DEMO_ENTRY_IDS.location,
+          relatedFactionIds: [],
+          representativeCharacterIds: [DEMO_ENTRY_IDS.character],
+          appearance:
+            "云栖狐体型接近家猫，体态轻盈，耳尖微向上翘。其尾毛呈半透明状，在星落期间会自行发出柔和的乳白色微光，如同裹了一层薄薄星尘。",
+          physiology:
+            "云栖狐能够敏锐感知魔力潮汐的细微变化，常在星落异象前夕表现出明显的焦躁或聚集行为。它们偏好栖息在浮空岛边缘与高空气流稳定的云林地带，以小型昆虫和灵性植物为食。",
+          abilities:
+            "感知魔力潮汐的流向与强度变化；在星落期间能与附近符纹产生短暂共鸣；有学院记录表明它们会主动引导迷路的旅人走向安全路径，这一行为的原因尚不明确。",
+          culture:
+            "云栖狐并非智慧种族，没有人类意义上的社会制度。它们以小型家族群为单位活动，有较固定的领地范围，群内存在以年长雌性为核心的亲缘协作行为。",
+          history:
+            "星落学院的早期观测记录中多次提及云栖狐与星落异象同时出现，有学者推测它们可能比浮空岛文明更早感知星落的征兆。",
+          distribution:
+            "主要分布在苍岚浮空岛边缘的云林地带、学院周边的高空草甸以及中央观星台附近的浮石区域。远离人烟的北部崖壁也有少量目击记录。",
+          relationshipWithHumans:
+            "民间视云栖狐为吉兆，传说它们在旅人迷路时会出现并指引方向。贵族曾一度试图捕获作为稀有宠物，此事引发争议后浮空岛议会已立法将其列为受保护物种。",
+          creatorNotes:
+            "云栖狐可作为章节间温柔调剂、预兆象征或关键引路线索使用，其与星落异象之间的隐秘联系可在第二卷逐渐展开。",
+        },
       },
       {
         id: DEMO_ENTRY_IDS.note,
