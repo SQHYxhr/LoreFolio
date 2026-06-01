@@ -335,6 +335,70 @@ export interface EventProfile {
   creatorNotes: string;
 }
 
+// ── 种族 / 物种结构化档案 ──────────────────────────────────
+
+export const SPECIES_CATEGORIES = [
+  "humanoid",
+  "animal",
+  "mythic",
+  "spirit",
+  "monster",
+  "plant",
+  "construct",
+  "other",
+] as const;
+
+export type SpeciesCategory = "" | (typeof SPECIES_CATEGORIES)[number];
+
+export const SPECIES_CATEGORY_LABELS: Record<SpeciesCategory, string> = {
+  "": "未选择",
+  humanoid: "类人种族",
+  animal: "动物 / 灵兽",
+  mythic: "神话生物",
+  spirit: "灵体 / 精怪",
+  monster: "魔物 / 异兽",
+  plant: "植物生命",
+  construct: "造物 / 构装体",
+  other: "其他",
+};
+
+export const SPECIES_STATUSES = [
+  "common",
+  "rare",
+  "endangered",
+  "extinct",
+  "legendary",
+  "unknown",
+] as const;
+
+export type SpeciesStatus = "" | (typeof SPECIES_STATUSES)[number];
+
+export const SPECIES_STATUS_LABELS: Record<SpeciesStatus, string> = {
+  "": "未选择",
+  common: "常见",
+  rare: "稀有",
+  endangered: "濒危",
+  extinct: "已灭绝",
+  legendary: "传说中",
+  unknown: "未知",
+};
+
+export interface SpeciesProfile {
+  speciesCategory: SpeciesCategory;
+  status: SpeciesStatus;
+  habitatLocationId: string;
+  relatedFactionIds: string[];
+  representativeCharacterIds: string[];
+  appearance: string;
+  physiology: string;
+  abilities: string;
+  culture: string;
+  history: string;
+  distribution: string;
+  relationshipWithHumans: string;
+  creatorNotes: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -369,6 +433,8 @@ export interface Entry {
   itemProfile?: ItemProfile;
   /** 事件结构化档案；仅 type === "event" 时有效 */
   eventProfile?: EventProfile;
+  /** 种族 / 物种结构化档案；仅 type === "species" 时有效 */
+  speciesProfile?: SpeciesProfile;
 }
 
 export interface AppData {
@@ -428,6 +494,7 @@ export type EntryFormData = Pick<
   | "factionProfile"
   | "itemProfile"
   | "eventProfile"
+  | "speciesProfile"
 >;
 
 export type ProjectFormData = Pick<Project, "name" | "description">;
