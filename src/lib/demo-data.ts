@@ -269,6 +269,30 @@ export function createDemoData(): AppData {
         isPinned: false,
         tags: ["冲突", "政治"],
         relatedEntryIds: [DEMO_ENTRY_IDS.faction],
+        eventProfile: {
+          eventCategory: "conflict",
+          status: "ongoing",
+          chronology: "星历纪元",
+          startDateText: "星历 102 年秋",
+          endDateText: "",
+          locationId: "",
+          primaryFactionId: DEMO_ENTRY_IDS.faction,
+          participantCharacterIds: [],
+          involvedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedItemIds: [DEMO_ENTRY_IDS.item],
+          cause:
+            "星落异象之后，苍岚浮空岛与北境联盟在霜线矿区的星银矿脉归属问题持续升温。北境联盟声称矿区自古属于地表，而浮空岛议会依据《云陆条约》主张开采权。双方围绕矿脉的观测权与封锁政策产生了多轮摩擦。",
+          process:
+            "守序会以「魔法安全评估」为由介入调查，并对霜线矿区实施了部分封锁。这一举措引发了边境聚落居民、自由研究者与地方势力之间的激烈争执，小规模交火与情报间谍事件频繁发生。",
+          result:
+            "目前冲突尚未完全结束，双方在矿区外围形成对峙状态。部分敏感档案被守序会内部封存，外界难以获知全部真相。",
+          impact:
+            "霜线冲突加深了星落学院与守序会之间的微妙裂痕，也使得星银研究、符文学进展与边境政治搅在了一起，学院内部逐渐分化出不同立场的学者团体。",
+          aftermath:
+            "有迹象表明霜线矿区的争端背后可能牵涉残响护符的起源、星落异象与更早的历史事件之间的隐秘联系，这些线索有待进一步揭开。",
+          creatorNotes:
+            "霜线冲突可作为主线政治剧情、角色卷入点或守序会内部派系斗争的舞台，建议根据第一卷主线节奏决定何时深入展开。",
+        },
       },
       {
         id: DEMO_ENTRY_IDS.species,
