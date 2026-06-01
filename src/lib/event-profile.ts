@@ -27,9 +27,11 @@ function normalizeIdArray(raw: unknown): string[] {
   const seen = new Set<string>();
   const result: string[] = [];
   for (const item of raw) {
-    if (typeof item === "string" && item.trim() && !seen.has(item)) {
-      seen.add(item);
-      result.push(item);
+    if (typeof item !== "string") continue;
+    const id = item.trim();
+    if (id && !seen.has(id)) {
+      seen.add(id);
+      result.push(id);
     }
   }
   return result;
