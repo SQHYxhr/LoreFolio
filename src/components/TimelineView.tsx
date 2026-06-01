@@ -20,16 +20,26 @@ export function TimelineView({ projectId }: TimelineViewProps) {
 
   const project = getProject(projectId);
 
-  const eventEntries = useMemo(
-    () =>
-      data.entries
-        .filter((e) => e.type === "event" && e.projectId === projectId)
-        .sort((a, b) => {
-          if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
-          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-        }),
-    [data.entries, projectId],
-  );
+  const groupedEvents = useMemo(() => {
+    const events = data.entries
+      .filter((e) => e.type === "event" && e.projectId === projectId)
+      .sort((a, b) => {
+        if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      });
+
+    const groups: { chronology: string; events: typeof events }[] = [];
+    for (const event of events) {
+      const key = event.eventProfile?.chronology?.trim() || "未分类纪年";
+      let group = groups.find((g) => g.chronology === key);
+      if (!group) {
+        group = { chronology: key, events: [] };
+        groups.push(group);
+      }
+      group.events.push(event);
+    }
+    return groups;
+  }, [data.entries, projectId]);
 
   if (!hydrated) {
     return (
@@ -72,7 +82,7 @@ export function TimelineView({ projectId }: TimelineViewProps) {
             </p>
           </div>
 
-          {eventEntries.length === 0 ? (
+          {groupedEvents.length === 0 ? (
             <EmptyState
               icon={Clock}
               title="该项目还没有事件条目"
@@ -84,97 +94,116 @@ export function TimelineView({ projectId }: TimelineViewProps) {
               }
             />
           ) : (
-            /* Vertical timeline */
-            <div className="relative ml-3 space-y-6 border-l-2 border-border/60 pl-8 sm:ml-6 sm:pl-10">
-              {eventEntries.map((entry) => {
-                const p = entry.eventProfile;
-                const hasProfile =
-                  !!p &&
-                  (!!p.eventCategory ||
-                    !!p.status ||
-                    !!p.chronology.trim() ||
-                    !!p.startDateText.trim() ||
-                    !!p.endDateText.trim());
-
-                return (
-                  <div key={entry.id} className="relative pb-6 last:pb-0">
-                    {/* Timeline dot */}
-                    <div className="absolute -left-[calc(2rem+1px)] top-1 flex h-4 w-4 items-center justify-center sm:-left-[calc(2.5rem+1px)]">
-                      <div className="h-2.5 w-2.5 rounded-full border-2 border-border bg-card" />
+            /* Vertical timeline with chronology groups */
+            <div className="relative ml-3 border-l-2 border-border/60 pl-8 sm:ml-6 sm:pl-10">
+              {groupedEvents.map((group) => (
+                <div key={group.chronology} className="pb-8 last:pb-0">
+                  {/* Group header */}
+                  <div className="relative -ml-[calc(2rem+3px)] mb-5 flex items-center gap-3 sm:-ml-[calc(2.5rem+3px)]">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-primary/30 bg-background">
+                      <span className="text-xs font-medium text-primary/70">
+                        {group.events.length}
+                      </span>
                     </div>
-
-                    {/* Card */}
-                    <button
-                      type="button"
-                      onClick={() => router.push(`/project/${projectId}?event=${entry.id}`)}
-                      className="w-full rounded-xl border border-border/70 bg-card/40 p-4 text-left transition-colors hover:border-primary/30 sm:p-5"
-                    >
-                      <div className="mb-2 flex flex-wrap items-center gap-2">
-                        {hasProfile ? (
-                          <>
-                            {p?.eventCategory ? (
-                              <Badge variant="secondary" className="text-xs">
-                                {EVENT_CATEGORY_LABELS[p.eventCategory] || p.eventCategory}
-                              </Badge>
-                            ) : null}
-                            {p?.status ? (
-                              <Badge variant="outline" className="text-xs">
-                                {EVENT_STATUS_LABELS[p.status] || p.status}
-                              </Badge>
-                            ) : null}
-                          </>
-                        ) : (
-                          <Badge variant="outline" className="text-xs text-muted-foreground">
-                            尚未补充事件档案
-                          </Badge>
-                        )}
-                        {entry.isPinned ? (
-                          <Badge variant="secondary" className="text-xs">
-                            置顶
-                          </Badge>
-                        ) : null}
-                        <span className="text-xs text-muted-foreground">
-                          {ENTRY_TYPE_ICONS.event}
-                        </span>
-                      </div>
-
-                      <h3 className="font-serif text-lg font-semibold leading-snug">
-                        {entry.title || "未命名事件"}
-                      </h3>
-
-                      {entry.summary ? (
-                        <p className="mt-1 text-sm text-muted-foreground line-clamp-3">
-                          {entry.summary}
-                        </p>
-                      ) : null}
-
-                      {hasProfile ? (
-                        <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted-foreground sm:grid-cols-3">
-                          {p?.chronology?.trim() ? (
-                            <div>
-                              <span className="font-medium">纪年</span> {p.chronology}
-                            </div>
-                          ) : null}
-                          {p?.startDateText?.trim() ? (
-                            <div>
-                              <span className="font-medium">起始</span> {p.startDateText}
-                            </div>
-                          ) : null}
-                          {p?.endDateText?.trim() ? (
-                            <div>
-                              <span className="font-medium">结束</span> {p.endDateText}
-                            </div>
-                          ) : null}
-                        </div>
-                      ) : null}
-
-                      <p className="mt-3 text-right text-xs text-muted-foreground/60">
-                        点击查看事件详情 →
+                    <div>
+                      <h2 className="font-serif text-base font-semibold text-foreground/85">
+                        {group.chronology}
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        {group.events.length} 个事件
                       </p>
-                    </button>
+                    </div>
                   </div>
-                );
-              })}
+
+                  {/* Group events */}
+                  <div className="space-y-5">
+                    {group.events.map((entry) => {
+                      const p = entry.eventProfile;
+                      const hasProfile =
+                        !!p &&
+                        (!!p.eventCategory ||
+                          !!p.status ||
+                          !!p.chronology.trim() ||
+                          !!p.startDateText.trim() ||
+                          !!p.endDateText.trim());
+
+                      return (
+                        <div key={entry.id} className="relative">
+                          {/* Timeline dot */}
+                          <div className="absolute -left-[calc(2rem+1px)] top-1.5 flex h-4 w-4 items-center justify-center sm:-left-[calc(2.5rem+1px)]">
+                            <div className="h-2.5 w-2.5 rounded-full border-2 border-border bg-card" />
+                          </div>
+
+                          {/* Card */}
+                          <button
+                            type="button"
+                            onClick={() => router.push(`/project/${projectId}?event=${entry.id}`)}
+                            className="w-full rounded-xl border border-border/70 bg-card/40 p-4 text-left transition-colors hover:border-primary/30 sm:p-5"
+                          >
+                            <div className="mb-2 flex flex-wrap items-center gap-2">
+                              {hasProfile ? (
+                                <>
+                                  {p?.eventCategory ? (
+                                    <Badge variant="secondary" className="text-xs">
+                                      {EVENT_CATEGORY_LABELS[p.eventCategory] || p.eventCategory}
+                                    </Badge>
+                                  ) : null}
+                                  {p?.status ? (
+                                    <Badge variant="outline" className="text-xs">
+                                      {EVENT_STATUS_LABELS[p.status] || p.status}
+                                    </Badge>
+                                  ) : null}
+                                </>
+                              ) : (
+                                <Badge variant="outline" className="text-xs text-muted-foreground">
+                                  尚未补充事件档案
+                                </Badge>
+                              )}
+                              {entry.isPinned ? (
+                                <Badge variant="secondary" className="text-xs">
+                                  置顶
+                                </Badge>
+                              ) : null}
+                              <span className="text-xs text-muted-foreground">
+                                {ENTRY_TYPE_ICONS.event}
+                              </span>
+                            </div>
+
+                            <h3 className="font-serif text-lg font-semibold leading-snug">
+                              {entry.title || "未命名事件"}
+                            </h3>
+
+                            {entry.summary ? (
+                              <p className="mt-1 text-sm text-muted-foreground line-clamp-3">
+                                {entry.summary}
+                              </p>
+                            ) : null}
+
+                            {hasProfile ? (
+                              <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted-foreground sm:grid-cols-3">
+                                {p?.startDateText?.trim() ? (
+                                  <div>
+                                    <span className="font-medium">起始</span> {p.startDateText}
+                                  </div>
+                                ) : null}
+                                {p?.endDateText?.trim() ? (
+                                  <div>
+                                    <span className="font-medium">结束</span> {p.endDateText}
+                                  </div>
+                                ) : null}
+                              </div>
+                            ) : null}
+
+                            <p className="mt-3 text-right text-xs text-muted-foreground/60">
+                              点击查看事件详情 →
+                            </p>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
