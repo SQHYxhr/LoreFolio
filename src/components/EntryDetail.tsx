@@ -19,6 +19,7 @@ import { LocationDetail } from "@/components/LocationDetail";
 import { FactionDetail } from "@/components/FactionDetail";
 import { ItemDetail } from "@/components/ItemDetail";
 import { EventDetail } from "@/components/EventDetail";
+import { SpeciesDetail } from "@/components/SpeciesDetail";
 import { createEmptyCharacterProfile } from "@/lib/character-profile";
 import { cn } from "@/lib/utils";
 
@@ -138,6 +139,20 @@ export function EntryDetail({
   if (entry.type === "event") {
     return (
       <EventDetail
+        entry={entry}
+        projectEntries={projectEntries}
+        relatedEntries={relatedEntries}
+        onEdit={onEdit}
+        onSelectRelated={onSelectRelated}
+        onSelectEntry={onSelectEntry}
+        onTagClick={onTagClick}
+      />
+    );
+  }
+
+  if (entry.type === "species") {
+    return (
+      <SpeciesDetail
         entry={entry}
         projectEntries={projectEntries}
         relatedEntries={relatedEntries}
