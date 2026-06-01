@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, GitFork } from "lucide-react";
+import { ArrowLeft, Calendar, GitFork } from "lucide-react";
 import type { Project } from "@/types";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,8 @@ interface TopBarProps {
   backLabel?: string;
   showRelationsLink?: boolean;
   relationsHref?: string;
+  showTimelineLink?: boolean;
+  timelineHref?: string;
 }
 
 export function TopBar({
@@ -19,6 +21,8 @@ export function TopBar({
   backLabel,
   showRelationsLink = false,
   relationsHref,
+  showTimelineLink = false,
+  timelineHref,
 }: TopBarProps) {
   const href = backHref ?? "/";
   const label = backLabel ?? "返回";
@@ -53,10 +57,18 @@ export function TopBar({
           <h1 className="font-serif text-lg font-semibold">设定档案馆</h1>
         )}
         {showRelationsLink && relationsHref ? (
-          <Link href={relationsHref} className="shrink-0">
+          <Link href={relationsHref} className="shrink-0 lg:hidden">
             <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
               <GitFork className="h-4 w-4" />
               <span className="hidden sm:inline">关系图</span>
+            </Button>
+          </Link>
+        ) : null}
+        {showTimelineLink && timelineHref ? (
+          <Link href={timelineHref} className="shrink-0 lg:hidden">
+            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
+              <Calendar className="h-4 w-4" />
+              <span className="hidden sm:inline">时间线</span>
             </Button>
           </Link>
         ) : null}

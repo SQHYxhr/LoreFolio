@@ -1,6 +1,6 @@
 "use client";
 
-import { GitFork, Plus } from "lucide-react";
+import { Calendar, GitFork, Plus } from "lucide-react";
 import type { EntryType, Project } from "@/types";
 import { ENTRY_TYPE_ICONS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ interface SidebarProps {
   onCreateEntry: () => void;
   countByType: (type: EntryType) => number;
   onNavigateToRelations?: () => void;
+  onNavigateToTimeline?: () => void;
 }
 
 export function Sidebar({
@@ -24,6 +25,7 @@ export function Sidebar({
   onCreateEntry,
   countByType,
   onNavigateToRelations,
+  onNavigateToTimeline,
 }: SidebarProps) {
   return (
     <aside className="hidden lg:flex h-full lg:w-56 shrink-0 flex-col border-r border-border/80 bg-card/40">
@@ -69,6 +71,18 @@ export function Sidebar({
           >
             <GitFork className="h-4 w-4" />
             关系图谱
+          </button>
+        </div>
+      ) : null}
+      {onNavigateToTimeline ? (
+        <div className="border-t border-border/80 px-2 py-2">
+          <button
+            type="button"
+            onClick={onNavigateToTimeline}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <Calendar className="h-4 w-4" />
+            时间线
           </button>
         </div>
       ) : null}

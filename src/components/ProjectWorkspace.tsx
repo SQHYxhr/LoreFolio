@@ -283,6 +283,8 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
         project={project}
         showRelationsLink
         relationsHref={`/project/${projectId}/relationships`}
+        showTimelineLink
+        timelineHref={`/project/${projectId}/timeline`}
       />
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <Sidebar
@@ -292,6 +294,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
           onCreateEntry={handleCreate}
           countByType={(type) => countEntriesByType(projectId, type)}
           onNavigateToRelations={() => router.push(`/project/${projectId}/relationships`)}
+          onNavigateToTimeline={() => router.push(`/project/${projectId}/timeline`)}
         />
 
         <section
