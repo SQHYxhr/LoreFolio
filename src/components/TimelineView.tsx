@@ -3,12 +3,53 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Clock, Search, X } from "lucide-react";
+import type { Entry } from "@/types";
 import { useStore } from "@/hooks/use-store";
 import { ENTRY_TYPE_ICONS, EVENT_CATEGORY_LABELS, EVENT_STATUS_LABELS } from "@/types";
 import { TopBar } from "@/components/TopBar";
 import { EmptyState } from "@/components/EmptyState";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+
+// ── Helpers ──────────────────────────────────────────────────
+
+function matchesSearch(entry: Entry, q: string): boolean {
+  const p = entry.eventProfile;
+  return (
+    entry.title.toLowerCase().includes(q) ||
+    entry.summary.toLowerCase().includes(q) ||
+    entry.tags.some((t) => t.toLowerCase().includes(q)) ||
+    (p?.cause?.toLowerCase().includes(q) ?? false) ||
+    (p?.process?.toLowerCase().includes(q) ?? false) ||
+    (p?.result?.toLowerCase().includes(q) ?? false) ||
+    (p?.impact?.toLowerCase().includes(q) ?? false) ||
+    (p?.aftermath?.toLowerCase().includes(q) ?? false) ||
+    (p?.creatorNotes?.toLowerCase().includes(q) ?? false)
+  );
+}
+
+function sortTimelineEvents(events: Entry[]): Entry[] {
+  return [...events].sort((a, b) => {
+    if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
+}
+
+function groupByChronology(events: Entry[]): { chronology: string; events: Entry[] }[] {
+  const groups: { chronology: string; events: Entry[] }[] = [];
+  for (const event of events) {
+    const key = event.eventProfile?.chronology?.trim() || "未分类纪年";
+    let group = groups.find((g) => g.chronology === key);
+    if (!group) {
+      group = { chronology: key, events: [] };
+      groups.push(group);
+    }
+    group.events.push(event);
+  }
+  return groups;
+}
+
+// ── Component ────────────────────────────────────────────────
 
 interface TimelineViewProps {
   projectId: string;
@@ -23,6 +64,7 @@ export function TimelineView({ projectId }: TimelineViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
+  // 1. 收集可用标签
   const availableTags = useMemo(() => {
     const tagSet = new Set<string>();
     for (const e of data.entries) {
@@ -33,53 +75,36 @@ export function TimelineView({ projectId }: TimelineViewProps) {
     return [...tagSet].sort((a, b) => a.localeCompare(b, "zh-CN"));
   }, [data.entries, projectId]);
 
-  const groupedEvents = useMemo(() => {
-    const sorted = data.entries
-      .filter((e) => e.type === "event" && e.projectId === projectId)
-      .sort((a, b) => {
-        if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
-        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-      });
+  // 2. 获取并排序事件
+  const eventEntries = useMemo(
+    () =>
+      sortTimelineEvents(
+        data.entries.filter((e) => e.type === "event" && e.projectId === projectId),
+      ),
+    [data.entries, projectId],
+  );
 
+  // 3. 搜索 + 标签过滤
+  const filteredEvents = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    let events = sorted;
+    let events = eventEntries;
 
     if (q) {
-      events = events.filter((e) => {
-        const p = e.eventProfile;
-        return (
-          e.title.toLowerCase().includes(q) ||
-          e.summary.toLowerCase().includes(q) ||
-          e.tags.some((t) => t.toLowerCase().includes(q)) ||
-          (p?.cause?.toLowerCase().includes(q) ?? false) ||
-          (p?.process?.toLowerCase().includes(q) ?? false) ||
-          (p?.result?.toLowerCase().includes(q) ?? false) ||
-          (p?.impact?.toLowerCase().includes(q) ?? false) ||
-          (p?.aftermath?.toLowerCase().includes(q) ?? false) ||
-          (p?.creatorNotes?.toLowerCase().includes(q) ?? false)
-        );
-      });
+      events = events.filter((e) => matchesSearch(e, q));
     }
 
     if (activeTag) {
       events = events.filter((e) => e.tags.includes(activeTag));
     }
 
-    const groups: { chronology: string; events: typeof events }[] = [];
-    for (const event of events) {
-      const key = event.eventProfile?.chronology?.trim() || "未分类纪年";
-      let group = groups.find((g) => g.chronology === key);
-      if (!group) {
-        group = { chronology: key, events: [] };
-        groups.push(group);
-      }
-      group.events.push(event);
-    }
-    return { groups, hasFilter: q.length > 0 || !!activeTag };
-  }, [data.entries, projectId, searchQuery, activeTag]);
+    return events;
+  }, [eventEntries, searchQuery, activeTag]);
 
-  const { groups, hasFilter } = groupedEvents;
-  const hasEvents = data.entries.some((e) => e.type === "event" && e.projectId === projectId);
+  // 4. 按 chronology 分组
+  const groups = useMemo(() => groupByChronology(filteredEvents), [filteredEvents]);
+
+  const hasEvents = eventEntries.length > 0;
+  const hasFilter = searchQuery.trim().length > 0 || !!activeTag;
 
   const clearFilters = () => {
     setSearchQuery("");
