@@ -3,6 +3,7 @@ import { normalizeLocationProfile } from "@/lib/location-profile";
 import { normalizeFactionProfile } from "@/lib/faction-profile";
 import { normalizeItemProfile } from "@/lib/item-profile";
 import { normalizeEventProfile } from "@/lib/event-profile";
+import { normalizeSpeciesProfile } from "@/lib/species-profile";
 import { normalizeTags } from "@/lib/entry-filters";
 import { migrateData, loadLegacyData, STORAGE_KEY, LEGACY_STORAGE_KEY, normalizeEntry, normalizeCharacterRelation } from "@/lib/migrate";
 import { generateId } from "@/lib/utils";
@@ -112,6 +113,7 @@ type EntryInput = Pick<
   | "factionProfile"
   | "itemProfile"
   | "eventProfile"
+  | "speciesProfile"
 >;
 
 function buildEntryFields(input: EntryInput) {
@@ -164,6 +166,13 @@ function buildEntryFields(input: EntryInput) {
     };
   }
 
+  if (input.type === "species" && input.speciesProfile) {
+    return {
+      ...fields,
+      speciesProfile: normalizeSpeciesProfile(input.speciesProfile),
+    };
+  }
+
   return fields;
 }
 
@@ -190,6 +199,9 @@ function clearStructuredReferences(
       }
       if (e.type === "event" && e.eventProfile?.locationId === entryId) {
         return { ...e, eventProfile: { ...e.eventProfile, locationId: "" } };
+      }
+      if (e.type === "species" && e.speciesProfile?.habitatLocationId === entryId) {
+        return { ...e, speciesProfile: { ...e.speciesProfile, habitatLocationId: "" } };
       }
       return e;
     });
@@ -221,6 +233,15 @@ function clearStructuredReferences(
           changed = true;
         }
         if (changed) return { ...e, eventProfile: ep };
+      }
+      if (e.type === "species" && e.speciesProfile?.relatedFactionIds?.includes(entryId)) {
+        return {
+          ...e,
+          speciesProfile: {
+            ...e.speciesProfile,
+            relatedFactionIds: e.speciesProfile.relatedFactionIds.filter((id) => id !== entryId),
+          },
+        };
       }
       return e;
     });
@@ -261,6 +282,17 @@ function clearStructuredReferences(
           eventProfile: {
             ...e.eventProfile,
             participantCharacterIds: e.eventProfile.participantCharacterIds.filter(
+              (id) => id !== entryId,
+            ),
+          },
+        };
+      }
+      if (e.type === "species" && e.speciesProfile?.representativeCharacterIds?.includes(entryId)) {
+        return {
+          ...e,
+          speciesProfile: {
+            ...e.speciesProfile,
+            representativeCharacterIds: e.speciesProfile.representativeCharacterIds.filter(
               (id) => id !== entryId,
             ),
           },
@@ -386,6 +418,28 @@ export function deleteProject(data: AppData, projectId: string): AppData {
         epChanged = true;
       }
       if (epChanged) entry.eventProfile = ep;
+    }
+
+    if (e.speciesProfile) {
+      const sp = { ...e.speciesProfile };
+      let spChanged = false;
+      if (sp.habitatLocationId && deletedEntryIds.has(sp.habitatLocationId)) {
+        sp.habitatLocationId = "";
+        spChanged = true;
+      }
+      if (sp.relatedFactionIds.some((id) => deletedEntryIds.has(id))) {
+        sp.relatedFactionIds = sp.relatedFactionIds.filter(
+          (id) => !deletedEntryIds.has(id),
+        );
+        spChanged = true;
+      }
+      if (sp.representativeCharacterIds.some((id) => deletedEntryIds.has(id))) {
+        sp.representativeCharacterIds = sp.representativeCharacterIds.filter(
+          (id) => !deletedEntryIds.has(id),
+        );
+        spChanged = true;
+      }
+      if (spChanged) entry.speciesProfile = sp;
     }
 
     return entry;

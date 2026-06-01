@@ -8,6 +8,7 @@ import { createEmptyLocationProfile, wouldCreateLocationCycle } from "@/lib/loca
 import { createEmptyFactionProfile, wouldCreateFactionCycle } from "@/lib/faction-profile";
 import { createEmptyItemProfile } from "@/lib/item-profile";
 import { createEmptyEventProfile } from "@/lib/event-profile";
+import { createEmptySpeciesProfile } from "@/lib/species-profile";
 import { ENTRY_IMAGE_FIELDS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,6 +61,7 @@ const emptyForm = (type: EntryType): EntryFormData => ({
   ...(type === "faction" ? { factionProfile: createEmptyFactionProfile() } : {}),
   ...(type === "item" ? { itemProfile: createEmptyItemProfile() } : {}),
   ...(type === "event" ? { eventProfile: createEmptyEventProfile() } : {}),
+  ...(type === "species" ? { speciesProfile: createEmptySpeciesProfile() } : {}),
 });
 
 export function EntryEditor({
@@ -119,6 +121,12 @@ export function EntryEditor({
               ? { ...entry.eventProfile }
               : createEmptyEventProfile()
             : undefined,
+        speciesProfile:
+          entry.type === "species"
+            ? entry.speciesProfile
+              ? { ...entry.speciesProfile }
+              : createEmptySpeciesProfile()
+            : undefined,
       });
     } else {
       setForm(emptyForm(defaultType));
@@ -143,6 +151,9 @@ export function EntryEditor({
         : {}),
       ...(newType === "event" && !prev.eventProfile
         ? { eventProfile: createEmptyEventProfile() }
+        : {}),
+      ...(newType === "species" && !prev.speciesProfile
+        ? { speciesProfile: createEmptySpeciesProfile() }
         : {}),
     }));
   };
@@ -221,6 +232,11 @@ export function EntryEditor({
       onSave({
         ...form,
         eventProfile: form.eventProfile ?? createEmptyEventProfile(),
+      });
+    } else if (form.type === "species") {
+      onSave({
+        ...form,
+        speciesProfile: form.speciesProfile ?? createEmptySpeciesProfile(),
       });
     } else {
       onSave({
