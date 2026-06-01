@@ -54,7 +54,9 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
 
   const searchParams = useSearchParams();
   const characterParam = searchParams.get("character");
+  const eventParam = searchParams.get("event");
   const processedParamRef = useRef<string | null>(null);
+  const eventParamRef = useRef<string | null>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,6 +79,28 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
       router.replace(`/project/${projectId}`);
     }
   }, [hydrated, characterParam, data.entries, projectId, router]);
+
+  useEffect(() => {
+    if (!hydrated || !eventParam || eventParamRef.current === eventParam) return;
+
+    const entry = data.entries.find(
+      (e) =>
+        e.id === eventParam &&
+        e.projectId === projectId &&
+        e.type === "event",
+    );
+
+    if (entry) {
+      eventParamRef.current = eventParam;
+      setActiveType("event");
+      setSelectedEntryId(entry.id);
+      setPanelMode("view");
+      setActiveTag(null);
+      setSearchQuery("");
+      setMobilePanel("detail");
+      router.replace(`/project/${projectId}`);
+    }
+  }, [hydrated, eventParam, data.entries, projectId, router]);
 
   const project = getProject(projectId);
   const typeEntries = useMemo(

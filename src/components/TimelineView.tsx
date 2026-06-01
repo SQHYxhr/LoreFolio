@@ -104,7 +104,11 @@ export function TimelineView({ projectId }: TimelineViewProps) {
                     </div>
 
                     {/* Card */}
-                    <div className="rounded-xl border border-border/70 bg-card/40 p-4 transition-colors hover:border-primary/30 sm:p-5">
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/project/${projectId}?event=${entry.id}`)}
+                      className="w-full rounded-xl border border-border/70 bg-card/40 p-4 text-left transition-colors hover:border-primary/30 sm:p-5"
+                    >
                       <div className="mb-2 flex flex-wrap items-center gap-2">
                         {hasProfile ? (
                           <>
@@ -163,7 +167,11 @@ export function TimelineView({ projectId }: TimelineViewProps) {
                           ) : null}
                         </div>
                       ) : null}
-                    </div>
+
+                      <p className="mt-3 text-right text-xs text-muted-foreground/60">
+                        点击查看事件详情 →
+                      </p>
+                    </button>
                   </div>
                 );
               })}
