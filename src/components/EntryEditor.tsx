@@ -7,6 +7,7 @@ import { createEmptyCharacterProfile } from "@/lib/character-profile";
 import { createEmptyLocationProfile, wouldCreateLocationCycle } from "@/lib/location-profile";
 import { createEmptyFactionProfile, wouldCreateFactionCycle } from "@/lib/faction-profile";
 import { createEmptyItemProfile } from "@/lib/item-profile";
+import { createEmptyEventProfile } from "@/lib/event-profile";
 import { ENTRY_IMAGE_FIELDS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,6 +58,7 @@ const emptyForm = (type: EntryType): EntryFormData => ({
   ...(type === "location" ? { locationProfile: createEmptyLocationProfile() } : {}),
   ...(type === "faction" ? { factionProfile: createEmptyFactionProfile() } : {}),
   ...(type === "item" ? { itemProfile: createEmptyItemProfile() } : {}),
+  ...(type === "event" ? { eventProfile: createEmptyEventProfile() } : {}),
 });
 
 export function EntryEditor({
@@ -110,6 +112,12 @@ export function EntryEditor({
               ? { ...entry.itemProfile }
               : createEmptyItemProfile()
             : undefined,
+        eventProfile:
+          entry.type === "event"
+            ? entry.eventProfile
+              ? { ...entry.eventProfile }
+              : createEmptyEventProfile()
+            : undefined,
       });
     } else {
       setForm(emptyForm(defaultType));
@@ -131,6 +139,9 @@ export function EntryEditor({
         : {}),
       ...(newType === "item" && !prev.itemProfile
         ? { itemProfile: createEmptyItemProfile() }
+        : {}),
+      ...(newType === "event" && !prev.eventProfile
+        ? { eventProfile: createEmptyEventProfile() }
         : {}),
     }));
   };
@@ -204,6 +215,11 @@ export function EntryEditor({
       onSave({
         ...form,
         itemProfile: form.itemProfile ?? createEmptyItemProfile(),
+      });
+    } else if (form.type === "event") {
+      onSave({
+        ...form,
+        eventProfile: form.eventProfile ?? createEmptyEventProfile(),
       });
     } else {
       onSave({

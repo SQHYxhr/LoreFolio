@@ -5,6 +5,7 @@ import { normalizeCharacterProfile } from "@/lib/character-profile";
 import { normalizeLocationProfile } from "@/lib/location-profile";
 import { normalizeFactionProfile } from "@/lib/faction-profile";
 import { normalizeItemProfile } from "@/lib/item-profile";
+import { normalizeEventProfile } from "@/lib/event-profile";
 
 export const STORAGE_KEY = "world-archive-v2";
 export const LEGACY_STORAGE_KEY = "world-archive-v1";
@@ -53,6 +54,13 @@ export function normalizeEntry(entry: Partial<Entry> & Pick<Entry, "id" | "proje
     return {
       ...base,
       itemProfile: normalizeItemProfile(entry.itemProfile),
+    };
+  }
+
+  if (entry.type === "event" && entry.eventProfile) {
+    return {
+      ...base,
+      eventProfile: normalizeEventProfile(entry.eventProfile),
     };
   }
 

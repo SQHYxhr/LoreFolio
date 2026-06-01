@@ -2,6 +2,7 @@ import type { AppData, CharacterRelation, Entry, EntryType, Project } from "@/ty
 import { normalizeLocationProfile } from "@/lib/location-profile";
 import { normalizeFactionProfile } from "@/lib/faction-profile";
 import { normalizeItemProfile } from "@/lib/item-profile";
+import { normalizeEventProfile } from "@/lib/event-profile";
 import { normalizeTags } from "@/lib/entry-filters";
 import { migrateData, loadLegacyData, STORAGE_KEY, LEGACY_STORAGE_KEY, normalizeEntry, normalizeCharacterRelation } from "@/lib/migrate";
 import { generateId } from "@/lib/utils";
@@ -110,6 +111,7 @@ type EntryInput = Pick<
   | "locationProfile"
   | "factionProfile"
   | "itemProfile"
+  | "eventProfile"
 >;
 
 function buildEntryFields(input: EntryInput) {
@@ -155,6 +157,13 @@ function buildEntryFields(input: EntryInput) {
     };
   }
 
+  if (input.type === "event" && input.eventProfile) {
+    return {
+      ...fields,
+      eventProfile: normalizeEventProfile(input.eventProfile),
+    };
+  }
+
   return fields;
 }
 
@@ -179,6 +188,9 @@ function clearStructuredReferences(
       if (e.type === "item" && e.itemProfile?.currentLocationId === entryId) {
         return { ...e, itemProfile: { ...e.itemProfile, currentLocationId: "" } };
       }
+      if (e.type === "event" && e.eventProfile?.locationId === entryId) {
+        return { ...e, eventProfile: { ...e.eventProfile, locationId: "" } };
+      }
       return e;
     });
   }
@@ -197,6 +209,19 @@ function clearStructuredReferences(
       if (e.type === "item" && e.itemProfile?.creatorFactionId === entryId) {
         return { ...e, itemProfile: { ...e.itemProfile, creatorFactionId: "" } };
       }
+      if (e.type === "event" && e.eventProfile) {
+        const ep = { ...e.eventProfile };
+        let changed = false;
+        if (ep.primaryFactionId === entryId) {
+          ep.primaryFactionId = "";
+          changed = true;
+        }
+        if (ep.involvedFactionIds?.includes(entryId)) {
+          ep.involvedFactionIds = ep.involvedFactionIds.filter((id) => id !== entryId);
+          changed = true;
+        }
+        if (changed) return { ...e, eventProfile: ep };
+      }
       return e;
     });
   }
@@ -210,10 +235,36 @@ function clearStructuredReferences(
     });
   }
 
+  if (oldType === "item") {
+    entries = entries.map((e) => {
+      if (e.type === "event" && e.eventProfile?.relatedItemIds?.includes(entryId)) {
+        return {
+          ...e,
+          eventProfile: {
+            ...e.eventProfile,
+            relatedItemIds: e.eventProfile.relatedItemIds.filter((id) => id !== entryId),
+          },
+        };
+      }
+      return e;
+    });
+  }
+
   if (oldType === "character") {
     entries = entries.map((e) => {
       if (e.type === "item" && e.itemProfile?.ownerCharacterId === entryId) {
         return { ...e, itemProfile: { ...e.itemProfile, ownerCharacterId: "" } };
+      }
+      if (e.type === "event" && e.eventProfile?.participantCharacterIds?.includes(entryId)) {
+        return {
+          ...e,
+          eventProfile: {
+            ...e.eventProfile,
+            participantCharacterIds: e.eventProfile.participantCharacterIds.filter(
+              (id) => id !== entryId,
+            ),
+          },
+        };
       }
       return e;
     });
@@ -303,6 +354,38 @@ export function deleteProject(data: AppData, projectId: string): AppData {
       if (ip.currentLocationId && deletedEntryIds.has(ip.currentLocationId)) ip.currentLocationId = "";
       if (ip.creatorFactionId && deletedEntryIds.has(ip.creatorFactionId)) ip.creatorFactionId = "";
       entry.itemProfile = ip;
+    }
+
+    if (e.eventProfile) {
+      const ep = { ...e.eventProfile };
+      let epChanged = false;
+      if (ep.locationId && deletedEntryIds.has(ep.locationId)) {
+        ep.locationId = "";
+        epChanged = true;
+      }
+      if (ep.primaryFactionId && deletedEntryIds.has(ep.primaryFactionId)) {
+        ep.primaryFactionId = "";
+        epChanged = true;
+      }
+      if (ep.participantCharacterIds.some((id) => deletedEntryIds.has(id))) {
+        ep.participantCharacterIds = ep.participantCharacterIds.filter(
+          (id) => !deletedEntryIds.has(id),
+        );
+        epChanged = true;
+      }
+      if (ep.involvedFactionIds.some((id) => deletedEntryIds.has(id))) {
+        ep.involvedFactionIds = ep.involvedFactionIds.filter(
+          (id) => !deletedEntryIds.has(id),
+        );
+        epChanged = true;
+      }
+      if (ep.relatedItemIds.some((id) => deletedEntryIds.has(id))) {
+        ep.relatedItemIds = ep.relatedItemIds.filter(
+          (id) => !deletedEntryIds.has(id),
+        );
+        epChanged = true;
+      }
+      if (epChanged) entry.eventProfile = ep;
     }
 
     return entry;
