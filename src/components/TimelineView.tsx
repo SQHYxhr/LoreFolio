@@ -21,6 +21,17 @@ export function TimelineView({ projectId }: TimelineViewProps) {
   const project = getProject(projectId);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+
+  const availableTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    for (const e of data.entries) {
+      if (e.type === "event" && e.projectId === projectId) {
+        for (const t of e.tags) tagSet.add(t);
+      }
+    }
+    return [...tagSet].sort((a, b) => a.localeCompare(b, "zh-CN"));
+  }, [data.entries, projectId]);
 
   const groupedEvents = useMemo(() => {
     const sorted = data.entries
@@ -31,22 +42,28 @@ export function TimelineView({ projectId }: TimelineViewProps) {
       });
 
     const q = searchQuery.trim().toLowerCase();
-    const events = q
-      ? sorted.filter((e) => {
-          const p = e.eventProfile;
-          return (
-            e.title.toLowerCase().includes(q) ||
-            e.summary.toLowerCase().includes(q) ||
-            e.tags.some((t) => t.toLowerCase().includes(q)) ||
-            (p?.cause?.toLowerCase().includes(q) ?? false) ||
-            (p?.process?.toLowerCase().includes(q) ?? false) ||
-            (p?.result?.toLowerCase().includes(q) ?? false) ||
-            (p?.impact?.toLowerCase().includes(q) ?? false) ||
-            (p?.aftermath?.toLowerCase().includes(q) ?? false) ||
-            (p?.creatorNotes?.toLowerCase().includes(q) ?? false)
-          );
-        })
-      : sorted;
+    let events = sorted;
+
+    if (q) {
+      events = events.filter((e) => {
+        const p = e.eventProfile;
+        return (
+          e.title.toLowerCase().includes(q) ||
+          e.summary.toLowerCase().includes(q) ||
+          e.tags.some((t) => t.toLowerCase().includes(q)) ||
+          (p?.cause?.toLowerCase().includes(q) ?? false) ||
+          (p?.process?.toLowerCase().includes(q) ?? false) ||
+          (p?.result?.toLowerCase().includes(q) ?? false) ||
+          (p?.impact?.toLowerCase().includes(q) ?? false) ||
+          (p?.aftermath?.toLowerCase().includes(q) ?? false) ||
+          (p?.creatorNotes?.toLowerCase().includes(q) ?? false)
+        );
+      });
+    }
+
+    if (activeTag) {
+      events = events.filter((e) => e.tags.includes(activeTag));
+    }
 
     const groups: { chronology: string; events: typeof events }[] = [];
     for (const event of events) {
@@ -58,11 +75,16 @@ export function TimelineView({ projectId }: TimelineViewProps) {
       }
       group.events.push(event);
     }
-    return { groups, hasQuery: q.length > 0 };
-  }, [data.entries, projectId, searchQuery]);
+    return { groups, hasFilter: q.length > 0 || !!activeTag };
+  }, [data.entries, projectId, searchQuery, activeTag]);
 
-  const { groups, hasQuery } = groupedEvents;
+  const { groups, hasFilter } = groupedEvents;
   const hasEvents = data.entries.some((e) => e.type === "event" && e.projectId === projectId);
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setActiveTag(null);
+  };
 
   if (!hydrated) {
     return (
@@ -106,25 +128,57 @@ export function TimelineView({ projectId }: TimelineViewProps) {
           </div>
 
           {hasEvents ? (
-            <div className="relative mb-6">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索事件标题、标签或内容…"
-                className="h-9 w-full rounded-lg border border-input bg-card pl-9 pr-8 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              />
-              {searchQuery ? (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
+            <>
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="搜索事件标题、标签或内容…"
+                  className="h-9 w-full rounded-lg border border-input bg-card pl-9 pr-8 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                ) : null}
+              </div>
+
+              {availableTags.length > 0 ? (
+                <div className="-mx-1 mb-6 flex flex-wrap items-center gap-1.5 px-1">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTag(null)}
+                    className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+                      !activeTag
+                        ? "border-primary/40 bg-primary/10 text-primary"
+                        : "border-border bg-card text-muted-foreground hover:border-primary/30"
+                    }`}
+                  >
+                    全部
+                  </button>
+                  {availableTags.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                      className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+                        activeTag === tag
+                          ? "border-primary/40 bg-primary/10 text-primary"
+                          : "border-border bg-card text-muted-foreground hover:border-primary/30"
+                      }`}
+                    >
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
               ) : null}
-            </div>
+            </>
           ) : null}
 
           {!hasEvents ? (
@@ -138,14 +192,14 @@ export function TimelineView({ projectId }: TimelineViewProps) {
                 </Button>
               }
             />
-          ) : hasQuery && groups.length === 0 ? (
+          ) : hasFilter && groups.length === 0 ? (
             <EmptyState
               icon={Search}
               title="未找到匹配事件"
-              description="尝试搜索标题、标签或事件内容，或使用不同的关键词。"
+              description="尝试调整搜索词或标签筛选。"
               action={
-                <Button variant="outline" onClick={() => setSearchQuery("")}>
-                  清除搜索
+                <Button variant="outline" onClick={clearFilters}>
+                  清除全部筛选
                 </Button>
               }
             />
