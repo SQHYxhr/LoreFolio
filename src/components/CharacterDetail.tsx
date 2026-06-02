@@ -15,6 +15,7 @@ import { GalleryGrid } from "@/components/GalleryGrid";
 import { ImageLightbox } from "@/components/ImageLightbox";
 import { RelatedEntries } from "@/components/RelatedEntries";
 import { CharacterRelationList } from "@/components/CharacterRelationList";
+import { CharacterHubSection } from "@/components/CharacterHubSection";
 
 interface CharacterDetailProps {
   entry: Entry;
@@ -294,6 +295,12 @@ export function CharacterDetail({
               onEdit={onEditRelation}
               onDelete={onDeleteRelation}
               onNavigate={onNavigateToCharacter}
+            />
+
+            <CharacterHubSection
+              entry={entry}
+              projectEntries={projectEntries}
+              onSelectEntry={onSelectEntry}
             />
 
             <RelatedEntries entries={relatedEntries} onSelect={onSelectRelated} />
