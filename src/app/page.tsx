@@ -56,6 +56,17 @@ export default function HomePage() {
   const handleExport = useCallback(() => {
     setExportError("");
     try {
+      if (
+        !window.confirm(
+          `确认导出当前数据？\n\n` +
+            `世界：${data.projects.length} 个\n` +
+            `条目：${data.entries.length} 个\n` +
+            `角色关系：${data.characterRelations.length} 条\n\n` +
+            `导出的 JSON 文件可用于备份、迁移或分享。`,
+        )
+      ) {
+        return;
+      }
       downloadBackup(data);
       setExported(true);
       setTimeout(() => setExported(false), 2000);
@@ -197,9 +208,26 @@ export default function HomePage() {
                     ) : null}
                   </p>
                   {importStatus === "idle" ? (
-                    <p className="text-muted-foreground">
-                      仅完成校验，尚未导入或覆盖当前数据。
-                    </p>
+                    <>
+                      <p className="text-muted-foreground">
+                        仅完成校验，尚未导入或覆盖当前数据。
+                      </p>
+                      {checkResult.payload.data.entries.length > 0 ? (
+                        <div className="mt-2">
+                          <p className="mb-1 text-muted-foreground">备份条目预览：</p>
+                          <ul className="space-y-0.5 text-muted-foreground">
+                            {checkResult.payload.data.entries.slice(0, 5).map((e) => (
+                              <li key={e.id} className="truncate">
+                                {e.type} · {e.title || "未命名条目"}
+                              </li>
+                            ))}
+                            {checkResult.payload.data.entries.length > 5 ? (
+                              <li>… 还有 {checkResult.payload.data.entries.length - 5} 个条目</li>
+                            ) : null}
+                          </ul>
+                        </div>
+                      ) : null}
+                    </>
                   ) : null}
                   {checkResult.warnings.length > 0 ? (
                     <ul className="mt-1 space-y-0.5 text-muted-foreground">

@@ -2,7 +2,7 @@ import type { AppData } from "@/types";
 import { ENTRY_TYPES } from "@/types";
 
 export interface BackupPayload {
-  app: "world-archive";
+  app: "lorefolio";
   version: 2;
   exportedAt: string;
   data: AppData;
@@ -10,7 +10,7 @@ export interface BackupPayload {
 
 export function createBackupPayload(data: AppData): BackupPayload {
   return {
-    app: "world-archive",
+    app: "lorefolio",
     version: 2,
     exportedAt: new Date().toISOString(),
     data,
@@ -25,8 +25,8 @@ export function downloadBackup(data: AppData, options?: { prefix?: string }): vo
 
   const today = new Date().toISOString().slice(0, 10);
   const filename = options?.prefix
-    ? `world-archive-${options.prefix}-${today}.json`
-    : `world-archive-backup-${today}.json`;
+    ? `lorefolio-${options.prefix}-${today}.json`
+    : `lorefolio-backup-${today}.json`;
 
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -72,8 +72,8 @@ export function validateBackupPayload(input: unknown): BackupValidationResult {
     return { ok: false, errors: ["备份文件格式不正确：根节点必须是对象。"] };
   }
 
-  if (input.app !== "world-archive") {
-    errors.push("备份文件格式不正确：缺少 app 字段或值不为 \"world-archive\"。");
+  if (input.app !== "world-archive" && input.app !== "lorefolio") {
+    errors.push(`备份文件格式不正确：不支持的 app 标识 "${String(input.app)}"。`);
   }
   if (input.version !== 2) {
     errors.push("备份文件格式不正确：version 必须为 2。");
@@ -188,7 +188,7 @@ export function validateBackupPayload(input: unknown): BackupValidationResult {
   }
 
   const payload: BackupPayload = {
-    app: input.app as "world-archive",
+    app: "lorefolio",
     version: 2,
     exportedAt: input.exportedAt as string,
     data: input.data as AppData,
