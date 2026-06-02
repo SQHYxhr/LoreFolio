@@ -93,6 +93,128 @@ export function createDemoData(): AppData {
         },
       },
       {
+        id: "demo-entry-character-sorin",
+        projectId: DEMO_PROJECT_ID,
+        type: "character",
+        title: "索林·维恩",
+        summary: "守序会执律人，出身星落贵族世家，对林晚星的平民身份与符文学天赋持矛盾态度。",
+        content: "索林是守序会最年轻的执律人之一。他的家族维恩氏在浮空岛议会中占有席位，自幼接受正统符文学教育。\n\n他在星落学院与林晚星同期入学，最初因她的平民出身而轻视她，却在一次实战符纹测试中惊讶于她的天赋。\n\n他对守序会的教条深信不疑，但林晚星的存在动摇了他对「天赋与出身成正比」这一信念。",
+        coverImage: "",
+        galleryImages: [],
+        imageAltMap: {},
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["贵族", "守序会", "符文学"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.faction, DEMO_ENTRY_IDS.location],
+        characterProfile: {
+          displayName: "索林·维恩",
+          aliases: ["索林", "维恩执律人"],
+          pronouns: "他",
+          ageText: "19 岁",
+          gender: "男",
+          identity: "守序会执律人 · 维恩家族继承人",
+          factionId: DEMO_ENTRY_IDS.faction,
+          locationId: DEMO_ENTRY_IDS.location,
+          speciesId: "",
+          appearance:
+            "身形修长，金棕色短发梳理整齐，常穿守序会深蓝色执律人制服。面容端正，眉眼间带着贵族子弟特有的矜持，但并非傲慢——更多是长期规训形成的审慎。",
+          personality:
+            "理性自律，对规则有近乎固执的尊重。内心深处对「秩序」的信奉源自家族传统而非盲从，这也意味着他有可能在面临真正的不公时质疑守序会。对林晚星的态度从轻视到困惑再到暗自敬佩，是他角色弧的主要方向。",
+          abilities:
+            "正统符文学训练背景，擅长符文解码与魔力流动分析。在实战符文应用方面不如林晚星富有直觉，但理论功底扎实，在符文学笔试中名列前茅。",
+          goals: "以家族期望为指引，希望成为守序会的星律议会成员；同时内心开始质疑守序会的某些做法是否真的符合正义。",
+          background:
+            "维恩家族是浮空岛议会的创始家族之一。索林从小接受严格的符文学与政治训练，被家族寄予厚望。他的母亲是现任星律议会成员，对索林的影响深远。\n\n进入守序会后，他被分配到星落学院作为驻院执律人，这也是他与林晚星产生交集的原因。",
+          trivia: "私下会在笔记中记录林晚星的符文解法；对云栖狐有一种说不清的亲近感；不喝学院提供的粗茶，总是自带家族特供的茶叶。",
+          statusText: "在读 · 守序会驻院执律人",
+          quote: "规则不是用来束缚人的，是用来保护那些无力保护自己的人。",
+        },
+      },
+      {
+        id: "demo-entry-character-elara",
+        projectId: DEMO_PROJECT_ID,
+        type: "character",
+        title: "艾拉·星语",
+        summary: "星落学院符文学导师，温和而敏锐，是林晚星的引路人，也是学院内部改革派的代表人物。",
+        content: "艾拉导师在星落学院执教符文学已有十五年。她出生于学者家庭，年轻时曾亲历一次星落，那次经历改变了她对学院知识垄断的看法。\n\n她是林晚星的入学推荐人，也是少数几个在学院内部公开主张「符文学应为所有人服务」的导师。\n\n她与守序会保持礼貌但疏远的关系，认为守序会对知识的封锁不利于文明的长远发展。",
+        coverImage: "",
+        galleryImages: [],
+        imageAltMap: {},
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["导师", "学院", "符文学"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.faction],
+        characterProfile: {
+          displayName: "艾拉·星语",
+          aliases: ["艾拉导师", "艾拉"],
+          pronouns: "她",
+          ageText: "42 岁",
+          gender: "女",
+          identity: "星落学院符文学导师 · 改革派学者",
+          factionId: "",
+          locationId: DEMO_ENTRY_IDS.location,
+          speciesId: "",
+          appearance:
+            "学者气质，深棕色长发常以简单的发簪束起。面容温和平静，眼角有细纹，是常年伏案阅读留下的痕迹。穿着朴素但整洁的学院导师袍，袖口有自己绣的浅色符文。",
+          personality:
+            "温和而坚定，对学生极有耐心但从不降低标准。善于观察学生的天赋方向而不急于纠正。在学院政治中保持低调但关键时刻从不退缩。相信知识的力量可以跨越阶级。",
+          abilities:
+            "深入研究符文学十五年，尤其擅长符文演化史。不是最强的实战符文师，但对符文理论和教学有独到见解。能识别学生的天赋倾向并针对性引导。",
+          goals: "推动学院改革，让更多有天赋的平民学生进入学院学习；研究星落与符文学起源之间的联系。",
+          background:
+            "出生于学者家庭，父母都是星落学院的图书管理员。年轻时在星落期间目睹一位平民符文学徒因缺乏训练而失控受伤，从此致力于推动符文学教育的平民化。\n\n十五年前成为正式导师，培养了多位优秀学生，林晚星是她最寄予厚望的一个。",
+          trivia: "私下收藏了许多被守序会认定为「不稳定」的符文样本；喜欢在观星台的静默阶梯上阅读；从不使用符文学为自己谋取便利。",
+          statusText: "在职 · 学院符文学导师",
+          quote: "天赋不认门第，只认心之所向。",
+        },
+      },
+      {
+        id: "demo-entry-character-kane",
+        projectId: DEMO_PROJECT_ID,
+        type: "character",
+        title: "凯恩·铁砂",
+        summary: "边境矿区的平民矿工，因霜线冲突失去了家人，对贵族与守序会都抱有深深的不信任。",
+        content: "凯恩是苍岚浮空岛边境地区的一名矿工。他的家族三代在霜线矿区开采星银，生活在浮空岛体系的最底层。\n\n星历 102 年的霜线冲突中，凯恩的家人在一次矿脉争夺战中丧生。他从此对贵族与守序会持敌视态度，并开始秘密组织边境矿工的互助团体。\n\n他与林晚星素未谋面，但作为同样出身底层的年轻人，他的故事与林晚星形成了平行对照——一个选择了学院道路，一个留在边境抗争。",
+        coverImage: "",
+        galleryImages: [],
+        imageAltMap: {},
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["平民", "边境", "冲突"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.event, DEMO_ENTRY_IDS.faction],
+        characterProfile: {
+          displayName: "凯恩·铁砂",
+          aliases: ["凯恩", "铁砂"],
+          pronouns: "他",
+          ageText: "22 岁",
+          gender: "男",
+          identity: "边境矿工 · 北境联盟支持者",
+          factionId: "demo-entry-faction-northern",
+          locationId: "",
+          speciesId: "",
+          appearance:
+            "体格结实，皮肤因常年在矿区劳作而呈古铜色，手臂和手掌布满矿尘与旧伤痕。深色头发随意束在脑后，眼神坚毅但带着疲惫。穿着耐用的矿工皮甲，腰间挂着一小袋星银碎屑——那是他父亲留下的最后一点矿样。",
+          personality:
+            "寡言务实，不轻易信任外人，但对同伴绝对忠诚。在经历了巨大失去之后变得坚硬，但内心深处仍保留着对公正的渴望。不擅长言辞，却能用行动影响身边的人。",
+          abilities:
+            "从小在矿区长大，对星银矿脉的走向有近乎直觉的判断力。虽未受过正规符文学训练，但对星银的属性与使用方法有丰富的实践经验。擅长在矿区环境中快速判断安全风险。",
+          goals:
+            "为边境矿工争取更好的生存条件；揭露贵族与守序会在霜线冲突中的责任；让边境居民的苦难被更多人看见。",
+          background:
+            "凯恩的祖父是第一批在霜线矿区发现星银矿脉的矿工之一。他的家族三代以采矿为生，见证了矿区从繁荣到被贵族控制的全过程。\n\n星历 102 年，霜线冲突升级，凯恩的父亲和弟弟在一次贵族雇佣兵的突袭中丧生。他从此成为边境矿工互助组织「铁砂会」的核心人物。",
+          trivia:
+            "能用星银碎屑做简单的手工护符，虽然没有符文效力，但被边境居民视为保平安之物；对学院出身的符文学者本能地抗拒；但会对自己信任的人展示罕见的温柔。",
+          statusText: "边境矿工 · 铁砂会组织者",
+          quote: "矿石不会说谎，人却可以。",
+        },
+      },
+      {
         id: DEMO_ENTRY_IDS.location,
         projectId: DEMO_PROJECT_ID,
         type: "location",
@@ -166,6 +288,39 @@ export function createDemoData(): AppData {
         },
       },
       {
+        id: "demo-entry-location-outpost",
+        projectId: DEMO_PROJECT_ID,
+        type: "location",
+        title: "霜线前哨",
+        summary: "位于霜线矿区边缘的军事化前哨站，是边境冲突的前线与各方势力的交汇点。",
+        content:
+          "霜线前哨建于星历 890 年，最初是星落学院的野外观测站，后来因为霜线矿区的星银矿脉发现而逐渐转为军事化管理。\n\n前哨站由守序会与浮空岛议会共同管辖，但实际上守序会的执律人拥有最高指挥权。前哨东侧是矿区入口，西侧是通往边境聚落的唯一道路。\n\n星历 102 年秋的冲突之后，前哨站成为北境联盟与浮空岛势力对峙的最前沿。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["边境", "冲突", "矿区"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.event, DEMO_ENTRY_IDS.faction],
+        locationProfile: {
+          locationCategory: "other",
+          status: "active",
+          parentLocationId: "",
+          governingFactionId: DEMO_ENTRY_IDS.faction,
+          environment:
+            "霜线前哨位于浮空岛边缘的霜线矿区外围。气候寒冷干燥，常年有高空强风，夜间温度骤降。前哨建筑用深灰色矿石与星银合金加固，四周设有观测塔与警报符文阵。",
+          landmarks:
+            "矿脉入口：霜线矿区的唯一正式入口，设有矿石纯度检测符文。\n前哨指挥塔：守序会派驻的最高级别执律人办公室，可俯瞰整个矿区。\n边境通道：连接前哨与边境聚落的狭窄石桥，被当地人称为「霜线之喉」。",
+          history:
+            "前哨最初建于星历 890 年，是星落学院野外观测网络的一部分。星历 920 年发现大量星银矿脉后，守序会接管并改建为军事化前哨。此后每一次星落前后的矿脉波动期，这里都是冲突最激烈的地方。",
+          access:
+            "矿区作业时间外需要执律人许可才能进入。边境通道在冲突期间会被封锁，平民不得随意通行。星落前夕通常实施全面管制。",
+          creatorNotes:
+            "霜线前哨是「边境冲突·霜线」事件的主要舞台。建议在描写时突出其寒冷、荒凉、高度军事化的氛围，与星落学院的温暖优雅形成对比。",
+        },
+      },
+      {
         id: DEMO_ENTRY_IDS.faction,
         projectId: DEMO_PROJECT_ID,
         type: "faction",
@@ -196,6 +351,39 @@ export function createDemoData(): AppData {
             "三百年前「大魔法失控事件」导致数座浮空岛半毁。幸存者中的七位星象学者与战法师共同组建了守序会，誓言不再让魔法脱离人类的理性掌控。此后守序会逐渐从应急组织演变为跨国规制机构，但也因其铁腕政策引发争议。",
           creatorNotes:
             "守序会的定位是灰色势力，而非纯粹反派。他们的担忧有历史依据，手段也有温和与强硬之分。在主线中，守序会内部对「星落异象」的态度并不统一，这可以成为林晚星与之产生复杂互动的切入点。",
+        },
+      },
+      {
+        id: "demo-entry-faction-northern",
+        projectId: DEMO_PROJECT_ID,
+        type: "faction",
+        title: "北境联盟",
+        summary: "地表王国组成的军事同盟，主张浮空岛非法占有星银资源，是守序会的主要对立势力。",
+        content:
+          "北境联盟由三个地表王国在星历 750 年前后秘密结成，最初的目标是联合对抗浮空岛日益扩张的政治影响力。\n\n霜线矿区的发现使联盟找到了具体的斗争焦点——星银矿脉。联盟声称矿区自古以来属于地表，《云陆条约》是在浮空岛议会胁迫下签订的不平等条约。\n\n联盟并非完全邪恶——许多成员国在浮空岛崛起过程中确实失去了原有领土和资源。但在追求公正的过程中，联盟也犯下了暴力报复和间谍破坏等错误。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["组织", "政治", "冲突"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.event, DEMO_ENTRY_IDS.faction],
+        factionProfile: {
+          factionCategory: "government",
+          status: "active",
+          parentFactionId: "",
+          headquartersLocationId: "demo-entry-location-outpost",
+          ideology:
+            "主张「土地属于大地之子」。北境联盟的核心信念是地表文明拥有对星银矿脉的历史主权，浮空岛的统治是建立在非法掠夺之上的。联盟内部有温和派（主张谈判恢复矿权）和强硬派（主张武力夺回），目前强硬派占据上风。",
+          structure:
+            "联盟采用邦联制，三个成员国各有一席决策权，重大决定需至少两席同意。联盟设有常设军事指挥部和情报网络，但缺乏守序会那样严密的三阶体制，执行效率取决于成员国之间的协调程度。",
+          influence:
+            "联盟在边境地区有深厚的民众基础——许多失去土地的平民和矿工对联盟持同情态度。但在核心浮空岛地区几乎没有直接影响力。联盟通过渗透、走私和外交手段维持对霜线矿区的压力。",
+          history:
+            "北境联盟的前身是地表王国的松散互保协议。星历 750 年正式建盟，此后数次在浮空岛议会中提出矿权申诉均被驳回。星历 102 年的霜线冲突是联盟强硬派主导的首次武力试探，结果尚未分晓。",
+          creatorNotes:
+            "北境联盟的设计目标是使其成为守序会的对立方，但不要把它写成纯粹反派。它的诉求有部分正当性，手段中有激进成分。可以提供多方视点让冲突更立体。",
         },
       },
       {
@@ -307,7 +495,7 @@ export function createDemoData(): AppData {
           endDateText: "",
           locationId: "",
           primaryFactionId: DEMO_ENTRY_IDS.faction,
-          participantCharacterIds: [],
+          participantCharacterIds: ["demo-entry-character-kane"],
           involvedFactionIds: [DEMO_ENTRY_IDS.faction],
           relatedItemIds: [DEMO_ENTRY_IDS.item],
           cause:
@@ -322,6 +510,47 @@ export function createDemoData(): AppData {
             "有迹象表明霜线矿区的争端背后可能牵涉残响护符的起源、星落异象与更早的历史事件之间的隐秘联系，这些线索有待进一步揭开。",
           creatorNotes:
             "霜线冲突可作为主线政治剧情、角色卷入点或守序会内部派系斗争的舞台，建议根据第一卷主线节奏决定何时深入展开。",
+        },
+      },
+      {
+        id: "demo-entry-event-trial",
+        projectId: DEMO_PROJECT_ID,
+        type: "event",
+        title: "符文入学试·林晚星",
+        summary: "林晚星参加星落学院入学符文测试的经过，在此事件中她首次公开展示了独特的符纹感知能力，并引起了艾拉导师与索林·维恩的注意。",
+        content:
+          "星历 97 年秋，星落学院一年一度的入学符文测试。来自浮空岛各地的年轻应试者聚集在学院符文大厅，在导师和观察官的注视下展示他们的符文学基础。\n\n林晚星作为边境出身、没有家族背景的应试者，从一开始就处于不利位置。她没有受过正规符文学训练，手中只有一本破旧的《基础符文通识》和几页自制的符纹笔记。\n\n在实际操作测试中，她的符纹感知能力第一次在公开场合显现——她能「看见」测试符文板上的魔力流动纹路，并以一种非传统但有效的方式激活了符阵。\n\n这次测试引起了艾拉导师的注意，她力排众议将林晚星破格录取。也在场的索林·维恩对此感到震惊，这成为他重新审视「天赋与出身」观念的起点。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["学院", "符文学", "测试"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.character],
+        eventProfile: {
+          eventCategory: "ceremony",
+          status: "concluded",
+          chronology: "星历纪元",
+          startDateText: "星历 97 年秋",
+          endDateText: "星历 97 年秋",
+          locationId: DEMO_ENTRY_IDS.location,
+          primaryFactionId: "",
+          participantCharacterIds: [DEMO_ENTRY_IDS.character, "demo-entry-character-sorin", "demo-entry-character-elara"],
+          involvedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedItemIds: [],
+          cause:
+            "星落学院每年秋季举行入学符文测试以筛选具有符文学天赋的学生。虽然学院声称面向所有浮空岛开放，但实际上测试偏向接受过前期训练的贵族和学院子弟。艾拉导师作为当年评审之一，注意到了林晚星的特异表现。",
+          process:
+            "测试分为理论笔试和实际符文操作两部分。林晚星在笔试中表现中规中矩，但在实际操作测试中展示了独特的「符纹感知」能力——她不需要接触符文板就能指出魔力流动的最弱点和最强点。她的激活方式与标准教科书不同但效果显著，引起了评审席上的争议。",
+          result:
+            "经过艾拉导师的推荐和评审组的投票，林晚星被破格录取为星落学院正式学生，成为近年最年轻的符文学徒之一。索林·维恩对结果表示异议但被驳回，这在他心中埋下了困惑的种子。",
+          impact:
+            "林晚星的录取在学院内部引起小范围讨论，部分贵族学生对此不满，但也有人对她的能力产生好奇。艾拉导师因此获得了推动平民招生的一个实际案例。索林开始重新思考自己家族教导的「天赋与血统对等」这一信念。",
+          aftermath:
+            "林晚星进入学院后成为艾拉导师的直属学生。她的能力在后续学习中持续增长，但也面临来自贵族同学的隐性排挤。入学试的争议在学院档案中留下了记号，后来守序会特地对她的档案进行了标注。",
+          creatorNotes:
+            "符文入学试是第一卷早期事件，可作为林晚星故事线的起点。与霜线冲突的大尺度政治事件形成对比，这是个人成长尺度的转折点。建议在 Timeline 中将此事件排在前面。",
         },
       },
       {
