@@ -55,8 +55,10 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
   const searchParams = useSearchParams();
   const characterParam = searchParams.get("character");
   const eventParam = searchParams.get("event");
+  const entryParam = searchParams.get("entry");
   const processedParamRef = useRef<string | null>(null);
   const eventParamRef = useRef<string | null>(null);
+  const entryParamRef = useRef<string | null>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -101,6 +103,25 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
       router.replace(`/project/${projectId}`);
     }
   }, [hydrated, eventParam, data.entries, projectId, router]);
+
+  useEffect(() => {
+    if (!hydrated || !entryParam || entryParamRef.current === entryParam) return;
+
+    const entry = data.entries.find(
+      (e) => e.id === entryParam && e.projectId === projectId,
+    );
+
+    if (entry) {
+      entryParamRef.current = entryParam;
+      setActiveType(entry.type);
+      setSelectedEntryId(entry.id);
+      setPanelMode("view");
+      setActiveTag(null);
+      setSearchQuery("");
+      setMobilePanel("detail");
+      router.replace(`/project/${projectId}`);
+    }
+  }, [hydrated, entryParam, data.entries, projectId, router]);
 
   const project = getProject(projectId);
   const typeEntries = useMemo(
@@ -311,6 +332,8 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
         timelineHref={`/project/${projectId}/timeline`}
         showDashboardLink
         dashboardHref={`/project/${projectId}/dashboard`}
+        showMapLink
+        mapHref={`/project/${projectId}/map`}
       />
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <Sidebar
@@ -322,6 +345,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
           onNavigateToRelations={() => router.push(`/project/${projectId}/relationships`)}
           onNavigateToTimeline={() => router.push(`/project/${projectId}/timeline`)}
           onNavigateToDashboard={() => router.push(`/project/${projectId}/dashboard`)}
+          onNavigateToMap={() => router.push(`/project/${projectId}/map`)}
         />
 
         <section

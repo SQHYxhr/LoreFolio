@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, GitFork, LayoutDashboard, Plus } from "lucide-react";
+import { Calendar, GitFork, LayoutDashboard, Map, Plus } from "lucide-react";
 import type { EntryType, Project } from "@/types";
 import { ENTRY_TYPE_ICONS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,7 @@ interface SidebarProps {
   onNavigateToRelations?: () => void;
   onNavigateToTimeline?: () => void;
   onNavigateToDashboard?: () => void;
+  onNavigateToMap?: () => void;
 }
 
 export function Sidebar({
@@ -28,6 +29,7 @@ export function Sidebar({
   onNavigateToRelations,
   onNavigateToTimeline,
   onNavigateToDashboard,
+  onNavigateToMap,
 }: SidebarProps) {
   return (
     <aside className="hidden lg:flex h-full lg:w-56 shrink-0 flex-col border-r border-border/80 bg-card/40">
@@ -73,6 +75,18 @@ export function Sidebar({
           >
             <LayoutDashboard className="h-4 w-4" />
             世界概览
+          </button>
+        </div>
+      ) : null}
+      {onNavigateToMap ? (
+        <div className="border-t border-border/80 px-2 py-2">
+          <button
+            type="button"
+            onClick={onNavigateToMap}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <Map className="h-4 w-4" />
+            世界地图
           </button>
         </div>
       ) : null}
