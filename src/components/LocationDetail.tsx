@@ -13,6 +13,7 @@ import { EntryContentView } from "@/components/EntryContentView";
 import { GalleryGrid } from "@/components/GalleryGrid";
 import { ImageLightbox } from "@/components/ImageLightbox";
 import { RelatedEntries } from "@/components/RelatedEntries";
+import { LocationHubSection } from "@/components/LocationHubSection";
 
 interface LocationDetailProps {
   entry: Entry;
@@ -340,6 +341,12 @@ export function LocationDetail({
                 </p>
               </div>
             )}
+
+            <LocationHubSection
+              entry={entry}
+              projectEntries={projectEntries}
+              onSelectEntry={onSelectEntry}
+            />
 
             {/* Gallery */}
             <GalleryGrid
