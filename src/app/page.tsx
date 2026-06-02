@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, FileSearch, Library } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/hooks/use-store";
@@ -13,6 +13,26 @@ import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 import { EmptyState } from "@/components/EmptyState";
 import { BackToTopButton } from "@/components/BackToTopButton";
 
+const LAST_BACKUP_AT_KEY = "lorefolio-last-backup-at";
+
+function isValidBackupTimestamp(value: string | null): value is string {
+  if (!value) return false;
+  return Number.isFinite(new Date(value).getTime());
+}
+
+function formatBackupDate(value: string): string {
+  const timestamp = new Date(value);
+  if (!Number.isFinite(timestamp.getTime())) return "未知日期";
+  return value.slice(0, 10);
+}
+
+function isBackupStale(value: string): boolean {
+  const then = new Date(value).getTime();
+  if (!Number.isFinite(then)) return false;
+  const now = Date.now();
+  return now - then > 7 * 24 * 60 * 60 * 1000;
+}
+
 export default function HomePage() {
   const router = useRouter();
   const { hydrated, projects, data, storageError, addProject, removeProject, replaceData } = useStore();
@@ -21,6 +41,17 @@ export default function HomePage() {
   const [exportError, setExportError] = useState("");
   const [checkResult, setCheckResult] = useState<BackupValidationResult | null>(null);
   const [importStatus, setImportStatus] = useState<"idle" | "success" | "error">("idle");
+  const [lastBackupAt, setLastBackupAt] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!hydrated || typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(LAST_BACKUP_AT_KEY);
+      setLastBackupAt(isValidBackupTimestamp(stored) ? stored : null);
+    } catch {
+      setLastBackupAt(null);
+    }
+  }, [hydrated]);
 
   const handleCreate = (input: { name: string; description: string }) => {
     const project = addProject(input);
@@ -70,6 +101,13 @@ export default function HomePage() {
       downloadBackup(data);
       setExported(true);
       setTimeout(() => setExported(false), 2000);
+      const now = new Date().toISOString();
+      try {
+        localStorage.setItem(LAST_BACKUP_AT_KEY, now);
+        setLastBackupAt(now);
+      } catch {
+        setLastBackupAt(now);
+      }
     } catch (e) {
       console.error(e);
       setExportError("导出失败，请稍后重试。");
@@ -171,6 +209,22 @@ export default function HomePage() {
             <p className="max-w-xs text-right text-xs text-muted-foreground/70">
               导出 JSON 文件可用于备份或迁移到其他浏览器。导入备份会覆盖现有数据，导入前将自动下载一份当前数据的备份。
             </p>
+            {lastBackupAt !== null ? (
+              <p
+                className={`max-w-xs text-right text-xs ${
+                  isBackupStale(lastBackupAt)
+                    ? "text-amber-600 dark:text-amber-400"
+                    : "text-muted-foreground/70"
+                }`}
+              >
+                上次导出备份：{formatBackupDate(lastBackupAt)}
+                {isBackupStale(lastBackupAt) ? "，建议再导出一份新的本地备份。" : ""}
+              </p>
+            ) : (
+              <p className="max-w-xs text-right text-xs text-muted-foreground/70">
+                尚未记录到本地备份导出，建议导出一份 JSON 文件保存到安全位置。
+              </p>
+            )}
             <div className="flex items-center gap-2">
               {!storageError ? <CreateProjectDialog onCreate={handleCreate} /> : null}
               <Button
