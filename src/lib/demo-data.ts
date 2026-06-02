@@ -214,6 +214,36 @@ export function createDemoData(): AppData {
         isPinned: false,
         tags: ["世界观", "魔法", "星落"],
         relatedEntryIds: [DEMO_ENTRY_IDS.character, DEMO_ENTRY_IDS.item],
+        loreProfile: {
+          loreCategory: "magic_system",
+          status: "stable",
+          coreConcept:
+            "「星落异象」是星落纪世界中周期性出现的超自然天象。每隔约七十年，夜空会洒落细碎光屑，导致局部地区魔力浓度短时间升高，并引发灵兽躁动、遗物共鸣与部分人物感知异常。",
+          worldRules:
+            "1. 星落期间，魔力并不是平均扩散，而是沿着古老地脉、遗迹和高塔附近聚集。\n" +
+            "2. 光屑不会长期留存，通常会在数日内消散，但被遗物、灵兽或特殊体质者吸收后会留下残响。\n" +
+            "3. 星落不会直接创造力量，而是放大已有的潜能、裂痕和未解决的因果。\n" +
+            "4. 星落之后，世界往往进入一段不稳定时期，旧秩序会被重新审视。",
+          cosmology:
+            "传说星落来自世界外层的「星幕」。星幕并非真正的天空，而像是一层覆盖世界的古老屏障。每当星幕周期性松动，外层光屑便会穿透夜空落入大地。学者认为星落可能与远古文明遗留的观测塔有关，但这一解释尚未被完全证实。",
+          historyOverview:
+            "星落异象在星历纪元中多次出现。早期人们将其视为神迹，后来学院和各地组织逐渐将其记录为可观测的周期现象。最近一次星落发生在星历 102 年秋，直接引发了边境地区的灵兽迁徙和「霜线冲突」的升级。",
+          magicSystem:
+            "星落期间，魔法、灵性和遗物反应会明显增强。普通人可能只感到眩晕或梦境异常，而具备特殊感知能力的人会看到光屑中的「残响」。部分灵兽会被星落吸引并向高魔力区域迁徙。残响护符等物品可以短暂储存星落后的微弱回声。",
+          technologyLevel:
+            "当前世界尚未发展出完全解释星落的技术体系。星落学院等研究机构主要依靠观测塔、手抄星图、灵性仪器和遗物共鸣记录来追踪星落周期。不同地区对星落的理解差异很大，边境地区更多依靠经验和传说。",
+          culture:
+            "不同文化对星落有不同解释。学院派认为星落是自然现象，宗教团体将其视为启示，边境居民则把它看作危险前兆。许多地方会在星落之夜举行守夜仪式，也有人借机寻找遗物、捕捉灵兽或进行禁忌实验。",
+          conflicts:
+            "星落异象本身不是灾难，但它会放大世界中已有的矛盾。学院希望记录和研究，边境组织希望控制高魔力地点，民间团体则担心星落带来灾祸。当星落影响到灵兽迁徙、遗物苏醒和组织利益时，冲突就会迅速升级。",
+          creatorNotes:
+            "星落异象是 demo 世界的核心世界观规则，用来连接魔法体系、事件时间线、遗物、灵兽、学院和主角感知能力。它既可以作为背景设定，也可以作为推动剧情的周期性机制。",
+          relatedLocationIds: [DEMO_ENTRY_IDS.location],
+          relatedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedSpeciesIds: [DEMO_ENTRY_IDS.species],
+          relatedEventIds: [DEMO_ENTRY_IDS.event],
+          relatedItemIds: [DEMO_ENTRY_IDS.item],
+        },
       },
       {
         id: DEMO_ENTRY_IDS.item,
@@ -332,6 +362,211 @@ export function createDemoData(): AppData {
             "民间视云栖狐为吉兆，传说它们在旅人迷路时会出现并指引方向。贵族曾一度试图捕获作为稀有宠物，此事引发争议后浮空岛议会已立法将其列为受保护物种。",
           creatorNotes:
             "云栖狐可作为章节间温柔调剂、预兆象征或关键引路线索使用，其与星落异象之间的隐秘联系可在第二卷逐渐展开。",
+        },
+      },
+      {
+        id: "demo-entry-lore-worldrule",
+        projectId: DEMO_PROJECT_ID,
+        type: "lore",
+        title: "苍岚浮空岛世界规则",
+        summary: "苍岚浮空岛世界的基本物理法则、浮空原理与魔力流动规律，是关于这个世界如何运作的核心设定。",
+        content: "苍岚世界由数座悬浮于云海之上的浮空岛组成，其核心物理法则与地表世界存在多处根本性差异。\n\n浮空岛并非依靠常规重力悬浮，而是由深埋于岛屿基底的「星银矿脉」与大地之下的对偶矿脉之间产生的磁斥力所支撑。这种磁斥力在星落期间会短暂波动，导致部分小型浮岛出现位移或高度变化。\n\n魔力在苍岚世界并非均匀分布。它沿古老地脉、星银矿脉和古代观测塔遗址附近聚集，形成浓度不一的「魔力带」。浮空岛间的航行、符文学的实践、灵兽的迁徙路线都与这些魔力带的分布密切相关。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["世界观", "世界规则"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.lore],
+        loreProfile: {
+          loreCategory: "world_rule",
+          status: "stable",
+          coreConcept:
+            "苍岚浮空岛是星落纪世界观的主要舞台，其物理法则以星银矿脉磁斥力为核心，魔力的流动与星落周期共同塑造了这个世界的基本运作方式。",
+          worldRules:
+            "1. 浮空原理：星银矿脉与对偶矿脉之间的磁斥力使岛屿悬浮，矿脉的纯度与厚度决定岛屿的高度与稳定性。\n2. 魔力带分布：魔力并非均匀扩散，而是沿地脉、矿脉和高塔附近聚集，形成浓度不一的条带状区域。\n3. 星落影响：星落期间磁斥力短暂波动，可能导致小型浮岛位移，也是新矿脉被发现的主要时机。\n4. 遗物残响：部分古代遗物能够在星落期间储存微弱的魔力回声，这一特性被称为「残响效应」。",
+          cosmology:
+            "苍岚世界的地质结构由多层矿脉交错构成，部分地区可以追溯到更早的时代。星银矿脉的形成与星落有关——每次星落都会在特定地点沉积新的矿层，因此浮空岛的矿脉纹路记录着星落的历史。",
+          historyOverview:
+            "浮空岛并非一开始就存在。根据《苍岚纪年》，远古时代大地完整，星银深埋地下。第一次星落后，部分陆地开始分离上升，形成最初的浮空岛。此后每一次星落都在重塑地形，有些岛屿诞生，有些岛屿坠毁。",
+          magicSystem:
+            "魔力来自星银矿脉与星落光屑的交互。符文学的实践建立在「符文即矿脉的微缩映射」这一理论上——符文学徒通过在介质上刻绘特定符文来引导附近的魔力流动。残响护符等遗物则能在星落期间被动储存魔力。",
+          technologyLevel:
+            "苍岚世界处于前工业文明与魔力技术混合的阶段。星落学院等研究机构以观测、记录和符文实验为主，尚未发展出系统化的科学理论。不同浮空岛之间的技术差距很大，核心岛屿掌握符文学与星图绘制，边境地区则更多依赖经验与传说。",
+          culture:
+            "浮空岛上的社会以浮空岛议会为最高协调机构，各主要岛屿有其自治权。星落学院在文化传承中扮演重要角色，但也被批评为「贵族的知识垄断」。平民阶层对星落的理解更多依赖口述传统与民间仪式。",
+          conflicts:
+            "浮空岛的世界规则实际上塑造了社会的不平等——矿脉最丰富的岛屿拥有最强的浮空稳定性与最多的符文学资源，而矿脉稀薄的边境岛屿则面临坠落风险与资源匮乏。这种结构性不平等是许多政治冲突的根源。",
+          creatorNotes:
+            "这一条目是苍岚世界的基础规则设定，应与其他 lore 条目（历史文化、宇宙观、冲突）配合使用。在写作中建议保持「星银矿脉」的核心设定一致性。",
+          relatedLocationIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.observatory],
+          relatedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedSpeciesIds: [],
+          relatedEventIds: [DEMO_ENTRY_IDS.event],
+          relatedItemIds: [DEMO_ENTRY_IDS.item],
+        },
+      },
+      {
+        id: "demo-entry-lore-cosmology",
+        projectId: DEMO_PROJECT_ID,
+        type: "lore",
+        title: "星幕与古代遗迹",
+        summary: "覆盖世界外层的神秘屏障——星幕，以及散布在浮空岛上的古代观测塔遗迹，是理解星落异象起源的关键线索。",
+        content: "星幕是苍岚世界中一个古老而神秘的设定。它并非真正的天空，而是一层半透明的屏障，将浮空岛世界与外界隔开。\n\n远古文明留下的观测塔被认为与星幕有关。这些塔并非用于防御或居住，而是用于监测星幕的波动，并在星落前夕发出预警。\n\n目前已知的观测塔分布在星落学院地下、中央观星台以及北部崖壁。守序会封锁了部分塔址，外界难以探知全部真相。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["世界观", "宇宙观", "遗迹"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.observatory, DEMO_ENTRY_IDS.lore],
+        loreProfile: {
+          loreCategory: "cosmology",
+          status: "stable",
+          coreConcept:
+            "星幕是一层覆盖世界的古老屏障，周期性松动导致星落异象。古代观测塔是远古文明用于监测星幕波动的遗迹，其分布与星落的规律密切相关。",
+          worldRules:
+            "星幕并非物理天空，而是一层具有周期性波动特征的屏障。星落期间星幕出现裂缝，光屑从中洒落。观测塔与星幕之间存在未知的联系——塔内的某些结构能够与星幕共振。",
+          cosmology:
+            "星幕的起源尚无定论。一种假说认为它是远古文明在灾难之后为了保护幸存者而建造的；另一种假说认为它是自然形成的。观测塔在苍岚世界共有约七座已知遗址，其中三座已被发现，其余位置仅存在于古代文献的记载中。",
+          historyOverview:
+            "对星幕的研究始于星落学院建立之初。第一批星象学者通过持续观测发现星幕的周期并非固定七十年，而是在六十五到七十五年之间波动。观测塔的存在直到近百年才被确认——星落学院地底封存库的发掘揭示了第一座完整塔址。",
+          magicSystem:
+            "观测塔本身不具备主动的魔法功能，但塔内的石质结构与特定符文会产生共振效应。在星落前夕，观测塔内部的特定石板会微微发光，被认为是最早的星落预警装置。符文学中部分高级符文直接来源于观测塔内壁的刻痕。",
+          technologyLevel:
+            "当前的观测技术主要依靠手抄星图和灵性仪器。星落学院的地底封存库保存着部分古代观测设备，但大部分已经损坏。守序会掌握的几座塔址中，据传仍有部分结构能够运作。",
+          culture:
+            "古代观测塔在民间传说中被神化。边境居民相信塔内居住着守护星幕的灵体，学院学者则将其视为需要保护的研究资源。守序会对塔址的封锁引发了学术界的争议——许多学者认为这些塔应当是公共研究资源。",
+          conflicts:
+            "观测塔的控制权是学院与守序会之间的潜在冲突点。守序会认为塔址可能隐藏危险，应当严密封锁；学院则主张开放研究以理解星幕的规律。边境地区的新塔址发现往往伴随着政治角力。",
+          creatorNotes:
+            "星幕与观测塔是主线剧情中的重要伏笔。建议不要让塔址的全部秘密过早揭晓，保持神秘感。北部崖壁的塔址可以作为第二卷的探索目标。",
+          relatedLocationIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.observatory],
+          relatedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedSpeciesIds: [],
+          relatedEventIds: [],
+          relatedItemIds: [DEMO_ENTRY_IDS.item],
+        },
+      },
+      {
+        id: "demo-entry-lore-history",
+        projectId: DEMO_PROJECT_ID,
+        type: "lore",
+        title: "星历纪元历史概览",
+        summary: "从第一次星落到当前时代的千年历史脉络，包括关键事件、时代划分与主要文明变迁。",
+        content: "星历纪元始于第一次有记载的星落事件。\n\n根据《苍岚纪年》的记录，星历元年前夕，苍岚大地完整，星银深埋地下。第一次星落改写了整个世界的物理格局——部分陆地上升成为浮空岛，星银矿脉首次暴露于地表。\n\n此后约每七十年一次的星落周期成为划分时代的主要依据。每个时代都有其标志性事件：第二次星落后浮空岛议会的成立、第五次星落后符文学的诞生、第十次星落后星落学院的建立。\n\n最近一次星落发生在星历 102 年，也是第十二次。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["世界观", "历史"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.lore],
+        loreProfile: {
+          loreCategory: "history",
+          status: "stable",
+          coreConcept:
+            "星历纪元以星落周期为时间轴，十二次星落事件划分了苍岚世界的历史。每一次星落不仅改变物理格局，也重塑政治秩序与文化走向。",
+          worldRules: "",
+          cosmology: "",
+          historyOverview:
+            "星历纪元前：大地完整，文明以地表王国为主，星银矿脉深埋地下。\n星历 0 年：第一次星落。部分陆地上升为浮空岛，星银首次暴露，地表文明遭受重创。\n星历 140 年：第二次星落。浮空岛议会成立，确立「一岛一票」的议事原则。\n星历 350 年：第五次星落。符文学诞生，第一批符文被系统化记录。\n星历 560 年：第八次星落。守序会成立，起初为应急组织。\n星历 700 年：第十次星落。星落学院正式建立，成为符文学与星象学的研究中心。\n星历 910 年：第十二次星落（最近一次）。边境冲突升级，「霜线」争端爆发。",
+          magicSystem:
+            "符文学的演变与星落周期紧密相关。每次星落后都会出现新的符文变体，学者们至今无法确定这是星落本身的效应，还是研究者在新环境下做出了不同的解读。",
+          technologyLevel:
+            "星历纪元的文明经历了从地表王国到浮空岛文明的迁移。早期以农业和基础贸易为主，符文学诞生后开始出现与魔力技术混合的产业。星落学院的建立标志着知识体系的学院化。",
+          culture:
+            "星历纪元的时代划分本身是一种文化建构。不同浮空岛对时代的命名和意义赋予存在差异——核心岛屿倾向于强调议会与学院的历史，边境地区则更多以灾难和抗争为叙事主线。",
+          conflicts:
+            "历史的书写本身就是冲突。议会版本的《苍岚纪年》与边境地区的口述传统之间存在多处矛盾。守序会介入历史记录的审查问题长期存在争议。",
+          creatorNotes:
+            "建议以此为背景参考，在写作中保持一致的时代划分。具体事件细节可根据剧情需要调整，但星落的周期性规则建议不要轻易更改。",
+          relatedLocationIds: [DEMO_ENTRY_IDS.location],
+          relatedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedSpeciesIds: [],
+          relatedEventIds: [DEMO_ENTRY_IDS.event],
+          relatedItemIds: [],
+        },
+      },
+      {
+        id: "demo-entry-lore-culture",
+        projectId: DEMO_PROJECT_ID,
+        type: "lore",
+        title: "苍岚浮空岛文化体系",
+        summary: "浮空岛社会中不同阶层、地区的文化传统、价值观差异与生活方式，以及星落文化在民间的表现形态。",
+        content: "浮空岛文化并非单一体系。核心岛屿如苍岚主岛以学院文化为主导，重视符文学、星象观测与议会政治。边境浮空岛则保留着更多地表王国时代的传统——包括口头叙事、岁时仪式与地方信仰。\n\n星落文化是贯穿所有地区和阶层的一条主线。星落之夜被称为「星夜」，各岛屿都有自己的星夜仪式：学院举行观测晚宴，边境居民则在屋顶点燃星银粉末，祈求平安度过魔力潮汐期。\n\n贵族与平民之间的文化差异显著。贵族掌握符文学和星图知识，平民则更多依赖经验与传说。这种知识分层是许多社会矛盾的根源。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["世界观", "文化", "社会"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.location, DEMO_ENTRY_IDS.faction, DEMO_ENTRY_IDS.lore],
+        loreProfile: {
+          loreCategory: "culture",
+          status: "stable",
+          coreConcept:
+            "苍岚浮空岛是一个多元文化并存的社会，以学院文化和星落文化为两大支柱。贵族与平民、核心岛与边境地区之间的文化差异是社会结构的核心特征之一。",
+          worldRules: "",
+          cosmology: "",
+          historyOverview:
+            "浮空岛文化的形成经历了从地表王国到悬浮社会的转变。早期浮空岛居民主要是地表灾难的幸存者，携带了各自的文化传统。随着时间推移，独特的浮空岛文化逐渐形成——以星落为周期的岁时体系、以矿脉为依托的经济结构、以议会和学院为核心的社会组织。",
+          magicSystem: "",
+          technologyLevel: "",
+          culture:
+            "学院文化：以星落学院为中心，重视学术研究、符文学训练和星象观测。学院出身的人在议会和守序会中占有重要职位。\n边境文化：以家族和聚落为基础，保留了更多地表时代的传统，对学院和议会的权威持保留态度。星夜仪式、聚落集会、口头传承是边境文化的主要形式。\n贵族文化：掌握核心矿脉与符文学知识，在政治和经济上占据优势地位。贵族子弟多就读于星落学院。\n平民文化：依赖手工艺、贸易和季节性劳动为生。对星落的认知以实用经验为主。",
+          conflicts:
+            "文化分层带来的冲突主要体现在：知识的垄断（贵族 vs 平民对符文学的接触权）、资源的分配（核心岛 vs 边境的矿脉占有）、文化的正当性（学院派 vs 民间传统的合法性之争）。",
+          creatorNotes:
+            "文化体系条目为角色背景和情节设计提供参考。建议在写作中根据不同角色出身展现不同文化视角，增加世界的立体感。",
+          relatedLocationIds: [DEMO_ENTRY_IDS.location],
+          relatedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedSpeciesIds: [DEMO_ENTRY_IDS.species],
+          relatedEventIds: [],
+          relatedItemIds: [],
+        },
+      },
+      {
+        id: "demo-entry-lore-conflict",
+        projectId: DEMO_PROJECT_ID,
+        type: "lore",
+        title: "核心冲突：贵族与平民",
+        summary: "浮空岛社会中最深层的社会矛盾——贵族与平民在知识、资源与政治权利上的长期对立，以及星落周期如何加剧这种张力。",
+        content: "苍岚浮空岛社会最核心的冲突不是国与国之间，也不是人类与灵兽之间，而是贵族与平民之间的长期结构性对立。\n\n贵族阶层掌握着星银矿脉、符文学知识和议会席位。平民阶层虽然占人口的多数，但在政治决策中几乎没有话语权。\n\n星落周期会周期性地加剧这种矛盾。星落期间，新矿脉的发现往往首先被贵族控制，而边境地区因矿脉稀薄面临的安全风险则由平民独自承担。\n\n守序会虽然以中立自居，但其领导层多来自贵族背景。学院虽然破格录取了部分平民学生（如林晚星），但整体氛围仍然偏向贵族。",
+        coverImage: "",
+        galleryImages: [],
+        createdAt: projectCreated,
+        updatedAt: now,
+        isFavorite: false,
+        isPinned: false,
+        tags: ["世界观", "冲突", "政治", "社会"],
+        relatedEntryIds: [DEMO_ENTRY_IDS.faction, DEMO_ENTRY_IDS.character, DEMO_ENTRY_IDS.event],
+        loreProfile: {
+          loreCategory: "conflict",
+          status: "stable",
+          coreConcept:
+            "贵族与平民之间的结构性对立是苍岚浮空岛社会的核心矛盾。知识的垄断、资源的分配不均与政治权利的失衡构成了冲突的基础，星落周期则周期性地放大这些矛盾。",
+          worldRules: "",
+          cosmology: "",
+          historyOverview:
+            "浮空岛社会的不平等并非自然形成，而是历史演变的结果。早期浮空岛居民在灾难后相对平等，但随着矿脉的发现和符文学的诞生，掌握矿脉和知识的家族逐渐崛起为贵族阶层。议会制度的「一岛一票」原则在实际上被核心岛屿主导，边境岛屿的诉求长期被忽视。",
+          magicSystem:
+            "符文学的知识垄断是冲突的核心之一。贵族家族控制着符文的核心典籍与教学方法，平民子弟除非展现出极高天赋（如林晚星），否则几乎没有接触符文学的机会。残响护符等遗物的研究也被限制在学院内部。",
+          technologyLevel: "",
+          culture: "",
+          conflicts:
+            "当前冲突的三大主线：\n1. 知识垄断：符文学的学习机会不均等，引发了平民学者团体的抗议。\n2. 资源分配：新发现矿脉的开发权几乎总是落入贵族手中，边境岛屿的安全风险却被均匀分摊。\n3. 政治代表权：议会制度名义上平等，实际上核心岛屿掌握了绝大多数票数。\n星落期间的「霜线冲突」是这些矛盾的集中爆发——矿区归属权之争背后是贵族与边境平民之间的长期积怨。",
+          creatorNotes:
+            "贵族与平民的冲突是多个角色和事件线的底层驱动力。林晚星作为平民出身的符文学徒，天然处于这个冲突的交汇点。建议在主线中保持这一矛盾的灰色性——不是所有贵族都是恶人，也不是所有平民都无私。",
+          relatedLocationIds: [DEMO_ENTRY_IDS.location],
+          relatedFactionIds: [DEMO_ENTRY_IDS.faction],
+          relatedSpeciesIds: [],
+          relatedEventIds: [DEMO_ENTRY_IDS.event],
+          relatedItemIds: [],
         },
       },
       {
