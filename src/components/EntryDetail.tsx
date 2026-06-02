@@ -20,6 +20,7 @@ import { FactionDetail } from "@/components/FactionDetail";
 import { ItemDetail } from "@/components/ItemDetail";
 import { EventDetail } from "@/components/EventDetail";
 import { SpeciesDetail } from "@/components/SpeciesDetail";
+import { LoreDetail } from "@/components/LoreDetail";
 import { createEmptyCharacterProfile } from "@/lib/character-profile";
 import { cn } from "@/lib/utils";
 
@@ -153,6 +154,20 @@ export function EntryDetail({
   if (entry.type === "species") {
     return (
       <SpeciesDetail
+        entry={entry}
+        projectEntries={projectEntries}
+        relatedEntries={relatedEntries}
+        onEdit={onEdit}
+        onSelectRelated={onSelectRelated}
+        onSelectEntry={onSelectEntry}
+        onTagClick={onTagClick}
+      />
+    );
+  }
+
+  if (entry.type === "lore") {
+    return (
+      <LoreDetail
         entry={entry}
         projectEntries={projectEntries}
         relatedEntries={relatedEntries}

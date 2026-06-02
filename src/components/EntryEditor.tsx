@@ -9,6 +9,7 @@ import { createEmptyFactionProfile, wouldCreateFactionCycle } from "@/lib/factio
 import { createEmptyItemProfile } from "@/lib/item-profile";
 import { createEmptyEventProfile } from "@/lib/event-profile";
 import { createEmptySpeciesProfile } from "@/lib/species-profile";
+import { createEmptyLoreProfile } from "@/lib/lore-profile";
 import { ENTRY_IMAGE_FIELDS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,7 @@ import { FactionEditor } from "@/components/FactionEditor";
 import { ItemEditor } from "@/components/ItemEditor";
 import { EventEditor } from "@/components/EventEditor";
 import { SpeciesEditor } from "@/components/SpeciesEditor";
+import { LoreEditor } from "@/components/LoreEditor";
 import { Separator } from "@/components/ui/separator";
 
 interface EntryEditorProps {
@@ -63,6 +65,7 @@ const emptyForm = (type: EntryType): EntryFormData => ({
   ...(type === "item" ? { itemProfile: createEmptyItemProfile() } : {}),
   ...(type === "event" ? { eventProfile: createEmptyEventProfile() } : {}),
   ...(type === "species" ? { speciesProfile: createEmptySpeciesProfile() } : {}),
+  ...(type === "lore" ? { loreProfile: createEmptyLoreProfile() } : {}),
 });
 
 export function EntryEditor({
@@ -128,6 +131,12 @@ export function EntryEditor({
               ? { ...entry.speciesProfile }
               : createEmptySpeciesProfile()
             : undefined,
+        loreProfile:
+          entry.type === "lore"
+            ? entry.loreProfile
+              ? { ...entry.loreProfile }
+              : createEmptyLoreProfile()
+            : undefined,
       });
     } else {
       setForm(emptyForm(defaultType));
@@ -155,6 +164,9 @@ export function EntryEditor({
         : {}),
       ...(newType === "species" && !prev.speciesProfile
         ? { speciesProfile: createEmptySpeciesProfile() }
+        : {}),
+      ...(newType === "lore" && !prev.loreProfile
+        ? { loreProfile: createEmptyLoreProfile() }
         : {}),
     }));
   };
@@ -239,6 +251,11 @@ export function EntryEditor({
         ...form,
         speciesProfile: form.speciesProfile ?? createEmptySpeciesProfile(),
       });
+    } else if (form.type === "lore") {
+      onSave({
+        ...form,
+        loreProfile: form.loreProfile ?? createEmptyLoreProfile(),
+      });
     } else {
       onSave({
         type: form.type,
@@ -269,7 +286,8 @@ export function EntryEditor({
   const isItem = form.type === "item";
   const isEvent = form.type === "event";
   const isSpecies = form.type === "species";
-  const isStructured = isCharacter || isLocation || isFaction || isItem || isEvent || isSpecies;
+  const isLore = form.type === "lore";
+  const isStructured = isCharacter || isLocation || isFaction || isItem || isEvent || isSpecies || isLore;
 
   return (
     <>
@@ -291,7 +309,9 @@ export function EntryEditor({
                             ? "新建事件档案"
                             : isSpecies
                               ? "新建种族档案"
-                              : "新建条目"
+                              : isLore
+                                ? "新建世界观档案"
+                                : "新建条目"
                   : isCharacter
                     ? "编辑角色档案"
                     : isLocation
@@ -304,7 +324,9 @@ export function EntryEditor({
                             ? "编辑事件档案"
                             : isSpecies
                               ? "编辑种族档案"
-                              : "编辑条目"}
+                              : isLore
+                                ? "编辑世界观档案"
+                                : "编辑条目"}
               </h2>
               {isCharacter ? (
                 <p className="text-xs text-muted-foreground">结构化 OC / 人物设定</p>
@@ -318,6 +340,8 @@ export function EntryEditor({
                 <p className="text-xs text-muted-foreground">结构化事件档案</p>
               ) : isSpecies ? (
                 <p className="text-xs text-muted-foreground">结构化种族 / 物种设定</p>
+              ) : isLore ? (
+                <p className="text-xs text-muted-foreground">结构化世界观设定</p>
               ) : null}
             </div>
             <div className="flex gap-2">
@@ -389,6 +413,13 @@ export function EntryEditor({
             />
           ) : isSpecies ? (
             <SpeciesEditor
+              form={form}
+              setForm={setForm}
+              entry={entry}
+              projectEntries={projectEntries}
+            />
+          ) : isLore ? (
+            <LoreEditor
               form={form}
               setForm={setForm}
               entry={entry}
