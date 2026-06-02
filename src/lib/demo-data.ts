@@ -305,6 +305,8 @@ export function createDemoData(): AppData {
           status: "active",
           parentLocationId: "",
           governingFactionId: DEMO_ENTRY_IDS.faction,
+          mapX: 0.5,
+          mapY: 0.3,
           environment:
             "学院建在主浮空岛「苍岚」东缘，环形回廊常年被高空气流与星尘微光包围。白昼能俯瞰云海，夜晚则能直接观测星落轨迹。",
           landmarks:
@@ -341,6 +343,8 @@ export function createDemoData(): AppData {
           status: "active",
           parentLocationId: DEMO_ENTRY_IDS.location,
           governingFactionId: DEMO_ENTRY_IDS.faction,
+          mapX: 0.55,
+          mapY: 0.25,
           environment:
             "观星台位于学院三层环形建筑的正中央，塔顶四周没有遮挡，夜晚能看见星尘沿透明穹顶缓慢流动。",
           landmarks:
@@ -374,6 +378,8 @@ export function createDemoData(): AppData {
           status: "active",
           parentLocationId: "",
           governingFactionId: DEMO_ENTRY_IDS.faction,
+          mapX: 0.15,
+          mapY: 0.75,
           environment:
             "霜线前哨位于浮空岛边缘的霜线矿区外围。气候寒冷干燥，常年有高空强风，夜间温度骤降。前哨建筑用深灰色矿石与星银合金加固，四周设有观测塔与警报符文阵。",
           landmarks:

@@ -132,6 +132,8 @@ export interface LocationProfile {
   status: LocationStatus;
   parentLocationId: string;
   governingFactionId: string;
+  mapX: number;
+  mapY: number;
   environment: string;
   landmarks: string;
   history: string;

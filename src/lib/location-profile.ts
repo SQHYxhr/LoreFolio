@@ -1,12 +1,21 @@
 import type { Entry, LocationProfile } from "@/types";
 import { LOCATION_CATEGORIES, LOCATION_STATUSES } from "@/types";
 
+function normalizeMapCoordinate(value: unknown): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  if (value < 0) return 0;
+  if (value > 1) return 1;
+  return value;
+}
+
 export function createEmptyLocationProfile(): LocationProfile {
   return {
     locationCategory: "",
     status: "",
     parentLocationId: "",
     governingFactionId: "",
+    mapX: 0,
+    mapY: 0,
     environment: "",
     landmarks: "",
     history: "",
@@ -37,6 +46,8 @@ export function normalizeLocationProfile(raw: unknown): LocationProfile {
       typeof obj.parentLocationId === "string" ? obj.parentLocationId : "",
     governingFactionId:
       typeof obj.governingFactionId === "string" ? obj.governingFactionId : "",
+    mapX: normalizeMapCoordinate(obj.mapX),
+    mapY: normalizeMapCoordinate(obj.mapY),
     environment: typeof obj.environment === "string" ? obj.environment : "",
     landmarks: typeof obj.landmarks === "string" ? obj.landmarks : "",
     history: typeof obj.history === "string" ? obj.history : "",
