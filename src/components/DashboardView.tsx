@@ -23,8 +23,22 @@ interface DashboardViewProps {
 // ── Helpers ──────────────────────────────────────────────────
 
 function hasProfile(entry: Entry): boolean {
-  const p = (entry as Record<string, unknown>)[`${entry.type}Profile`];
-  return !!p && typeof p === "object" && !Array.isArray(p);
+  switch (entry.type) {
+    case "character":
+      return Boolean(entry.characterProfile);
+    case "location":
+      return Boolean(entry.locationProfile);
+    case "faction":
+      return Boolean(entry.factionProfile);
+    case "item":
+      return Boolean(entry.itemProfile);
+    case "event":
+      return Boolean(entry.eventProfile);
+    case "species":
+      return Boolean(entry.speciesProfile);
+    default:
+      return false;
+  }
 }
 
 function StatCard({
