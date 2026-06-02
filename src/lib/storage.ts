@@ -4,6 +4,7 @@ import { normalizeFactionProfile } from "@/lib/faction-profile";
 import { normalizeItemProfile } from "@/lib/item-profile";
 import { normalizeEventProfile } from "@/lib/event-profile";
 import { normalizeSpeciesProfile } from "@/lib/species-profile";
+import { normalizeLoreProfile } from "@/lib/lore-profile";
 import { normalizeTags } from "@/lib/entry-filters";
 import { migrateData, loadLegacyData, STORAGE_KEY, LEGACY_STORAGE_KEY, normalizeEntry, normalizeCharacterRelation } from "@/lib/migrate";
 import { generateId } from "@/lib/utils";
@@ -114,6 +115,7 @@ type EntryInput = Pick<
   | "itemProfile"
   | "eventProfile"
   | "speciesProfile"
+  | "loreProfile"
 >;
 
 function buildEntryFields(input: EntryInput) {
@@ -170,6 +172,13 @@ function buildEntryFields(input: EntryInput) {
     return {
       ...fields,
       speciesProfile: normalizeSpeciesProfile(input.speciesProfile),
+    };
+  }
+
+  if (input.type === "lore" && input.loreProfile) {
+    return {
+      ...fields,
+      loreProfile: normalizeLoreProfile(input.loreProfile),
     };
   }
 

@@ -7,6 +7,7 @@ import { normalizeFactionProfile } from "@/lib/faction-profile";
 import { normalizeItemProfile } from "@/lib/item-profile";
 import { normalizeEventProfile } from "@/lib/event-profile";
 import { normalizeSpeciesProfile } from "@/lib/species-profile";
+import { normalizeLoreProfile } from "@/lib/lore-profile";
 
 export const STORAGE_KEY = "world-archive-v2";
 export const LEGACY_STORAGE_KEY = "world-archive-v1";
@@ -69,6 +70,13 @@ export function normalizeEntry(entry: Partial<Entry> & Pick<Entry, "id" | "proje
     return {
       ...base,
       speciesProfile: normalizeSpeciesProfile(entry.speciesProfile),
+    };
+  }
+
+  if (entry.type === "lore" && entry.loreProfile) {
+    return {
+      ...base,
+      loreProfile: normalizeLoreProfile(entry.loreProfile),
     };
   }
 
