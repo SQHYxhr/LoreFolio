@@ -399,6 +399,71 @@ export interface SpeciesProfile {
   creatorNotes: string;
 }
 
+// ── 世界观结构化档案 ──────────────────────────────────────
+
+export const LORE_CATEGORIES = [
+  "world_rule",
+  "cosmology",
+  "history",
+  "magic_system",
+  "technology",
+  "culture",
+  "religion",
+  "conflict",
+  "other",
+] as const;
+
+export type LoreCategory = "" | (typeof LORE_CATEGORIES)[number];
+
+export const LORE_CATEGORY_LABELS: Record<LoreCategory, string> = {
+  "": "未选择",
+  world_rule: "世界规则",
+  cosmology: "宇宙观 / 起源",
+  history: "历史背景",
+  magic_system: "魔法 / 超自然体系",
+  technology: "科技体系",
+  culture: "文化制度",
+  religion: "宗教 / 信仰",
+  conflict: "核心冲突",
+  other: "其他",
+};
+
+export const LORE_STATUSES = [
+  "draft",
+  "stable",
+  "deprecated",
+  "unknown",
+] as const;
+
+export type LoreStatus = "" | (typeof LORE_STATUSES)[number];
+
+export const LORE_STATUS_LABELS: Record<LoreStatus, string> = {
+  "": "未选择",
+  draft: "草稿",
+  stable: "稳定设定",
+  deprecated: "废弃 / 旧设定",
+  unknown: "未知",
+};
+
+export interface LoreProfile {
+  loreCategory: LoreCategory;
+  status: LoreStatus;
+  coreConcept: string;
+  worldRules: string;
+  cosmology: string;
+  historyOverview: string;
+  magicSystem: string;
+  technologyLevel: string;
+  culture: string;
+  conflicts: string;
+  creatorNotes: string;
+  relatedLocationIds: string[];
+  relatedFactionIds: string[];
+  relatedSpeciesIds: string[];
+  relatedEventIds: string[];
+  relatedItemIds: string[];
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -435,6 +500,8 @@ export interface Entry {
   eventProfile?: EventProfile;
   /** 种族 / 物种结构化档案；仅 type === "species" 时有效 */
   speciesProfile?: SpeciesProfile;
+  /** 世界观结构化档案；仅 type === "lore" 时有效 */
+  loreProfile?: LoreProfile;
 }
 
 export interface AppData {
@@ -495,6 +562,7 @@ export type EntryFormData = Pick<
   | "itemProfile"
   | "eventProfile"
   | "speciesProfile"
+  | "loreProfile"
 >;
 
 export type ProjectFormData = Pick<Project, "name" | "description">;
