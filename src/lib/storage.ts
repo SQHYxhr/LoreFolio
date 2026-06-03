@@ -352,6 +352,20 @@ export function updateProject(
   };
 }
 
+export function updateProjectWorldMap(
+  data: AppData,
+  projectId: string,
+  worldMap: Project["worldMap"],
+): AppData {
+  const now = new Date().toISOString();
+  return {
+    ...data,
+    projects: data.projects.map((p) =>
+      p.id === projectId ? { ...p, worldMap, updatedAt: now } : p,
+    ),
+  };
+}
+
 export function deleteProject(data: AppData, projectId: string): AppData {
   // Collect IDs of entries being deleted so we can clean up cross-references
   const deletedEntryIds = new Set(

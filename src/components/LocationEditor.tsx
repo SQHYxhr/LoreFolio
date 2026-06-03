@@ -35,6 +35,8 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
+function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
+
 export function LocationEditor({ form, setForm, entry, projectEntries }: LocationEditorProps) {
   const [inlineInsert, setInlineInsert] = useState<((url: string, alt?: string) => void) | null>(null);
   const [inlineAlt, setInlineAlt] = useState("");
@@ -191,6 +193,68 @@ export function LocationEditor({ form, setForm, entry, projectEntries }: Locatio
             onChange={(e) => setProfile({ creatorNotes: e.target.value })}
             rows={3}
           />
+        </div>
+      </section>
+
+      {/* ── 地图坐标 ──────────────────────────────────────────── */}
+      <section className="space-y-4 rounded-xl border border-border/70 bg-card/30 p-4">
+        <SectionTitle>地图坐标</SectionTitle>
+        <p className="text-xs text-muted-foreground">
+          坐标用于世界地图中的地点标注位置。左上为西北，右下为东南。
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>X 坐标</Label>
+              <input
+                type="range" min="0" max="100" step="1"
+                value={Math.round((profile.mapX??0)*100)}
+                onChange={(e)=>setProfile({mapX:Number(e.target.value)/100})}
+                className="w-full h-2"
+              />
+              <span className="text-xs text-muted-foreground">{Math.round((profile.mapX??0)*100)}</span>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Y 坐标</Label>
+              <input
+                type="range" min="0" max="100" step="1"
+                value={Math.round((profile.mapY??0)*100)}
+                onChange={(e)=>setProfile({mapY:Number(e.target.value)/100})}
+                className="w-full h-2"
+              />
+              <span className="text-xs text-muted-foreground">{Math.round((profile.mapY??0)*100)}</span>
+            </div>
+            <p className="text-xs font-medium text-foreground/70">
+              X {Math.round((profile.mapX??0)*100)} · Y {Math.round((profile.mapY??0)*100)}
+            </p>
+          </div>
+          <div
+            className="relative aspect-square overflow-hidden rounded-lg border border-border/70 bg-gradient-to-br from-[#faf6ee] to-[#f5efe0]"
+            onClick={(e:React.MouseEvent<HTMLDivElement>)=>{
+              const rect=e.currentTarget.getBoundingClientRect();
+              const x=clamp((e.clientX-rect.left)/rect.width,0,1);
+              const y=clamp((e.clientY-rect.top)/rect.height,0,1);
+              setProfile({mapX:x,mapY:y});
+            }}
+          >
+            {/* Grid */}
+            {[25,50,75].map((p)=>(<div key={`g${p}`} className="absolute bg-[#d4c8b0]/20" style={{left:`${p}%`,top:0,width:1,height:"100%"}}/>))}
+            {[25,50,75].map((p)=>(<div key={`h${p}`} className="absolute bg-[#d4c8b0]/20" style={{top:`${p}%`,left:0,height:1,width:"100%"}}/>))}
+            {/* Marker */}
+            <div className="absolute w-2.5 h-2.5 rounded-full border-2 border-[#7c4a2d] bg-[#fffcf7] -translate-x-1/2 -translate-y-1/2 shadow-sm"
+              style={{left:`${(profile.mapX??0)*100}%`,top:`${(profile.mapY??0)*100}%`}}
+              onPointerDown={(e)=>{
+                e.stopPropagation();
+                const div=e.currentTarget.parentElement!;
+                const onMove=(ev:PointerEvent)=>{
+                  const r=div.getBoundingClientRect();
+                  setProfile({mapX:clamp((ev.clientX-r.left)/r.width,0,1),mapY:clamp((ev.clientY-r.top)/r.height,0,1)});
+                };
+                const onUp=()=>{window.removeEventListener("pointermove",onMove);window.removeEventListener("pointerup",onUp);};
+                window.addEventListener("pointermove",onMove);window.addEventListener("pointerup",onUp);
+              }}
+            />
+          </div>
         </div>
       </section>
 

@@ -17,6 +17,7 @@ import {
   updateCharacterRelation,
   updateEntry,
   updateProject,
+  updateProjectWorldMap,
 } from "@/lib/storage";
 
 export function useStore() {
@@ -61,6 +62,13 @@ export function useStore() {
   const editProject = useCallback(
     (projectId: string, input: ProjectFormData) => {
       persist(updateProject(data, projectId, input));
+    },
+    [data, persist],
+  );
+
+  const setProjectWorldMap = useCallback(
+    (projectId: string, worldMap: Project["worldMap"]) => {
+      persist(updateProjectWorldMap(data, projectId, worldMap));
     },
     [data, persist],
   );
@@ -177,6 +185,7 @@ export function useStore() {
     replaceData,
     addProject,
     editProject,
+    setProjectWorldMap,
     removeProject,
     addEntry,
     editEntry,

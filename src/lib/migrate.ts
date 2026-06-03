@@ -103,6 +103,19 @@ export function normalizeCharacterRelation(
   };
 }
 
+export function normalizeWorldMap(config: unknown): { backgroundImage?: string; backgroundImageName?: string; backgroundOpacity: number; backgroundFit: "contain" | "cover" } | undefined {
+  if (!config || typeof config !== "object" || Array.isArray(config)) return undefined;
+  const wm = config as Record<string, unknown>;
+  const bi = typeof wm.backgroundImage === "string" && wm.backgroundImage.trim() ? wm.backgroundImage.trim() : undefined;
+  const name = typeof wm.backgroundImageName === "string" && wm.backgroundImageName.trim() ? wm.backgroundImageName.trim() : undefined;
+  if (!bi && !name) return undefined; // No meaningful config
+  let opacity = typeof wm.backgroundOpacity === "number" && isFinite(wm.backgroundOpacity) ? wm.backgroundOpacity : 1;
+  if (opacity < 0.2) opacity = 0.2;
+  if (opacity > 1) opacity = 1;
+  const fit = wm.backgroundFit === "cover" ? "cover" as const : "contain" as const;
+  return { backgroundImage: bi, backgroundImageName: name, backgroundOpacity: opacity, backgroundFit: fit };
+}
+
 export function migrateData(raw: unknown): AppData {
   if (!raw || typeof raw !== "object") {
     return { projects: [], entries: [], characterRelations: [] };
@@ -110,7 +123,13 @@ export function migrateData(raw: unknown): AppData {
 
   const data = raw as Partial<AppData>;
   return {
-    projects: Array.isArray(data.projects) ? data.projects : [],
+    projects: Array.isArray(data.projects)
+      ? data.projects.map((p) => {
+          const project = (p as unknown as Record<string, unknown> | undefined);
+          if (!project || typeof project !== "object") return p;
+          return { ...project, worldMap: normalizeWorldMap(project.worldMap) } as typeof data.projects[number];
+        })
+      : [],
     entries: Array.isArray(data.entries)
       ? data.entries.map((e) => normalizeEntry(e as Partial<Entry> & Pick<Entry, "id" | "projectId" | "type">))
       : [],

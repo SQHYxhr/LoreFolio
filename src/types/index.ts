@@ -466,12 +466,20 @@ export interface LoreProfile {
   relatedItemIds: string[];
 }
 
+export interface WorldMapConfig {
+  backgroundImage?: string;
+  backgroundImageName?: string;
+  backgroundOpacity?: number;
+  backgroundFit?: "contain" | "cover";
+}
+
 export interface Project {
   id: string;
   name: string;
   description: string;
   createdAt: string;
   updatedAt: string;
+  worldMap?: WorldMapConfig;
 }
 
 export interface Entry {
