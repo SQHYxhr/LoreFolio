@@ -324,6 +324,7 @@ export interface EventProfile {
   chronology: string;
   startDateText: string;
   endDateText: string;
+  timelineOrder?: number;
   locationId: string;
   primaryFactionId: string;
   participantCharacterIds: string[];

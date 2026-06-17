@@ -8,6 +8,7 @@ export function createEmptyEventProfile(): EventProfile {
     chronology: "",
     startDateText: "",
     endDateText: "",
+    timelineOrder: undefined,
     locationId: "",
     primaryFactionId: "",
     participantCharacterIds: [],
@@ -58,6 +59,10 @@ export function normalizeEventProfile(raw: unknown): EventProfile {
     chronology: typeof obj.chronology === "string" ? obj.chronology : "",
     startDateText: typeof obj.startDateText === "string" ? obj.startDateText : "",
     endDateText: typeof obj.endDateText === "string" ? obj.endDateText : "",
+    timelineOrder:
+      typeof obj.timelineOrder === "number" && Number.isFinite(obj.timelineOrder)
+        ? obj.timelineOrder
+        : undefined,
     locationId: typeof obj.locationId === "string" ? obj.locationId : "",
     primaryFactionId:
       typeof obj.primaryFactionId === "string" ? obj.primaryFactionId : "",

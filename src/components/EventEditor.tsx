@@ -226,6 +226,24 @@ export function EventEditor({ form, setForm, entry, projectEntries }: EventEdito
             />
           </div>
         </div>
+        <div className="space-y-2">
+          <Label htmlFor="event-timelineorder">时间线排序值</Label>
+          <Input
+            id="event-timelineorder"
+            type="number"
+            placeholder="如：100"
+            value={profile.timelineOrder ?? ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "") { setProfile({ timelineOrder: undefined }); return; }
+              const n = Number(v);
+              if (Number.isFinite(n)) setProfile({ timelineOrder: n });
+            }}
+          />
+          <p className="text-xs text-muted-foreground">
+            可选。用于控制时间线中的排序。不影响你填写的幻想纪年文本。
+          </p>
+        </div>
       </section>
 
       {/* ── 地点与主要组织 ─────────────────────────────────────── */}

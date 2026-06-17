@@ -30,7 +30,17 @@ function matchesSearch(entry: Entry, q: string): boolean {
 
 function sortTimelineEvents(events: Entry[]): Entry[] {
   return [...events].sort((a, b) => {
+    // 1. Pinned first
     if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+    // 2. By timelineOrder (ascending, undefined last)
+    const ao = a.eventProfile?.timelineOrder;
+    const bo = b.eventProfile?.timelineOrder;
+    if (ao !== bo) {
+      if (ao == null) return 1;
+      if (bo == null) return -1;
+      return ao - bo;
+    }
+    // 3. By updatedAt descending
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
 }
