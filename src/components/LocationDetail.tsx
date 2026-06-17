@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import Link from "next/link";
 import { Edit3, MapPin, Pin, Star } from "lucide-react";
 import type { Entry, LocationProfile } from "@/types";
 import { ENTRY_TYPE_LABELS, LOCATION_CATEGORY_LABELS, LOCATION_STATUS_LABELS } from "@/types";
 import { getImageAlt } from "@/lib/images";
+import { formatMapCoordLabel } from "@/lib/map-coordinates";
 import { cn, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -80,6 +82,8 @@ export function LocationDetail({
   const openImage = useCallback((src: string, alt: string) => {
     setLightbox({ src, alt });
   }, []);
+
+  const hasMapCoords = entry.locationProfile != null;
 
   const profile: LocationProfile | undefined = entry.locationProfile;
 
@@ -341,6 +345,24 @@ export function LocationDetail({
                 </p>
               </div>
             )}
+
+            {hasMapCoords ? (
+              <section className="rounded-xl border border-border/70 bg-card/40 p-4">
+                <h3 className="font-serif text-sm font-semibold text-foreground/90">地图位置</h3>
+                <div className="mt-2 flex items-center justify-between gap-3">
+                  <p className="text-sm text-muted-foreground">
+                    <MapPin className="mr-1 inline-block h-3.5 w-3.5" />
+                    {formatMapCoordLabel(entry.locationProfile!.mapX, entry.locationProfile!.mapY)}
+                  </p>
+                  <Link
+                    href={`/project/${entry.projectId}/map?location=${entry.id}`}
+                    className="shrink-0 rounded-lg border border-border/60 bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    在世界地图中查看 →
+                  </Link>
+                </div>
+              </section>
+            ) : null}
 
             <LocationHubSection
               entry={entry}

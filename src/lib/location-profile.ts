@@ -1,12 +1,6 @@
 import type { Entry, LocationProfile } from "@/types";
 import { LOCATION_CATEGORIES, LOCATION_STATUSES } from "@/types";
-
-function normalizeMapCoordinate(value: unknown): number {
-  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
-  if (value < 0) return 0;
-  if (value > 1) return 1;
-  return value;
-}
+import { normalizeMapCoordinate } from "@/lib/map-coordinates";
 
 export function createEmptyLocationProfile(): LocationProfile {
   return {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Pin, Star } from "lucide-react";
 import type { Entry, EntryFormData, LocationProfile } from "@/types";
 import { createEmptyLocationProfile } from "@/lib/location-profile";
+import { clamp01, toMapPercent } from "@/lib/map-coordinates";
 import { LOCATION_CATEGORY_LABELS, LOCATION_CATEGORIES, LOCATION_STATUS_LABELS, LOCATION_STATUSES } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,8 +35,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
     <h3 className="font-serif text-sm font-semibold text-foreground/90">{children}</h3>
   );
 }
-
-function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
 
 export function LocationEditor({ form, setForm, entry, projectEntries }: LocationEditorProps) {
   const [inlineInsert, setInlineInsert] = useState<((url: string, alt?: string) => void) | null>(null);
@@ -232,8 +231,8 @@ export function LocationEditor({ form, setForm, entry, projectEntries }: Locatio
             className="relative aspect-square overflow-hidden rounded-lg border border-border/70 bg-gradient-to-br from-[#faf6ee] to-[#f5efe0]"
             onClick={(e:React.MouseEvent<HTMLDivElement>)=>{
               const rect=e.currentTarget.getBoundingClientRect();
-              const x=clamp((e.clientX-rect.left)/rect.width,0,1);
-              const y=clamp((e.clientY-rect.top)/rect.height,0,1);
+              const x=clamp01((e.clientX-rect.left)/rect.width);
+              const y=clamp01((e.clientY-rect.top)/rect.height);
               setProfile({mapX:x,mapY:y});
             }}
           >
@@ -248,7 +247,7 @@ export function LocationEditor({ form, setForm, entry, projectEntries }: Locatio
                 const div=e.currentTarget.parentElement!;
                 const onMove=(ev:PointerEvent)=>{
                   const r=div.getBoundingClientRect();
-                  setProfile({mapX:clamp((ev.clientX-r.left)/r.width,0,1),mapY:clamp((ev.clientY-r.top)/r.height,0,1)});
+                  setProfile({mapX:clamp01((ev.clientX-r.left)/r.width),mapY:clamp01((ev.clientY-r.top)/r.height)});
                 };
                 const onUp=()=>{window.removeEventListener("pointermove",onMove);window.removeEventListener("pointerup",onUp);};
                 window.addEventListener("pointermove",onMove);window.addEventListener("pointerup",onUp);
