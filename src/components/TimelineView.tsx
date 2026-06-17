@@ -213,6 +213,10 @@ export function TimelineView({ projectId }: TimelineViewProps) {
                   ))}
                 </div>
               ) : null}
+
+            <p className="mb-4 text-xs text-muted-foreground/70">
+              排序值越小越靠前；未设置排序值的事件会排在后面。
+            </p>
             </>
           ) : null}
 
@@ -307,6 +311,11 @@ export function TimelineView({ projectId }: TimelineViewProps) {
                               {entry.isPinned ? (
                                 <Badge variant="secondary" className="text-xs">
                                   置顶
+                                </Badge>
+                              ) : null}
+                              {entry.eventProfile?.timelineOrder != null ? (
+                                <Badge variant="outline" className="text-xs text-muted-foreground">
+                                  #{entry.eventProfile.timelineOrder}
                                 </Badge>
                               ) : null}
                               <span className="text-xs text-muted-foreground">
