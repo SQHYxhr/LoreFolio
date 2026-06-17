@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, GitFork, LayoutDashboard, Map, Plus } from "lucide-react";
+import { Calendar, GitFork, LayoutDashboard, Map, Plus, Search } from "lucide-react";
 import type { EntryType, Project } from "@/types";
 import { ENTRY_TYPE_ICONS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,7 @@ interface SidebarProps {
   onNavigateToTimeline?: () => void;
   onNavigateToDashboard?: () => void;
   onNavigateToMap?: () => void;
+  onNavigateToSearch?: () => void;
 }
 
 export function Sidebar({
@@ -30,6 +31,7 @@ export function Sidebar({
   onNavigateToTimeline,
   onNavigateToDashboard,
   onNavigateToMap,
+  onNavigateToSearch,
 }: SidebarProps) {
   return (
     <aside className="hidden lg:flex h-full lg:w-56 shrink-0 flex-col border-r border-border/80 bg-card/40">
@@ -66,6 +68,18 @@ export function Sidebar({
           })}
         </nav>
       </ScrollArea>
+      {onNavigateToSearch ? (
+        <div className="border-t border-border/80 px-2 py-2">
+          <button
+            type="button"
+            onClick={onNavigateToSearch}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <Search className="h-4 w-4" />
+            全局搜索
+          </button>
+        </div>
+      ) : null}
       {onNavigateToDashboard ? (
         <div className="border-t border-border/80 px-2 py-2">
           <button

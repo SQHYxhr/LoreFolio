@@ -334,6 +334,8 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
         dashboardHref={`/project/${projectId}/dashboard`}
         showMapLink
         mapHref={`/project/${projectId}/map`}
+        showSearchLink
+        searchHref={`/project/${projectId}/search`}
       />
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <Sidebar
@@ -346,6 +348,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
           onNavigateToTimeline={() => router.push(`/project/${projectId}/timeline`)}
           onNavigateToDashboard={() => router.push(`/project/${projectId}/dashboard`)}
           onNavigateToMap={() => router.push(`/project/${projectId}/map`)}
+          onNavigateToSearch={() => router.push(`/project/${projectId}/search`)}
         />
 
         <section

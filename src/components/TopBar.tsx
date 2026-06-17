@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Calendar, GitFork, LayoutDashboard, Map } from "lucide-react";
+import { ArrowLeft, Calendar, GitFork, LayoutDashboard, Map, Search } from "lucide-react";
 import type { Project } from "@/types";
 import { Button } from "@/components/ui/button";
 
@@ -17,6 +17,8 @@ interface TopBarProps {
   dashboardHref?: string;
   showMapLink?: boolean;
   mapHref?: string;
+  showSearchLink?: boolean;
+  searchHref?: string;
 }
 
 export function TopBar({
@@ -31,6 +33,8 @@ export function TopBar({
   dashboardHref,
   showMapLink = false,
   mapHref,
+  showSearchLink = false,
+  searchHref,
 }: TopBarProps) {
   const href = backHref ?? "/";
   const label = backLabel ?? "返回";
@@ -93,6 +97,14 @@ export function TopBar({
             <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
               <Map className="h-4 w-4" />
               <span className="hidden sm:inline">地图</span>
+            </Button>
+          </Link>
+        ) : null}
+        {showSearchLink && searchHref ? (
+          <Link href={searchHref} className="shrink-0 lg:hidden">
+            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
+              <Search className="h-4 w-4" />
+              <span className="hidden sm:inline">搜索</span>
             </Button>
           </Link>
         ) : null}
