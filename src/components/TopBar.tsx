@@ -51,7 +51,7 @@ export function TopBar({
   }, [menuOpen, closeMenu]);
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border/80 bg-card/60 px-3 sm:px-4 backdrop-blur-sm">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border/80 bg-card/60 px-3 sm:px-4 backdrop-blur-sm z-50">
       <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-3">
         {/* Back link — styled link, not button-inside-link */}
         <Link
@@ -91,8 +91,8 @@ export function TopBar({
             </button>
             {menuOpen ? (
               <>
-                <div className="fixed inset-0 z-10" onClick={closeMenu} />
-                <div className="absolute right-0 top-full z-20 mt-1 w-36 rounded-lg border border-border bg-card py-1 shadow-lg" role="menu">
+                <div className="fixed inset-0 z-[51] cursor-default" onClick={closeMenu} role="presentation" />
+                <div className="absolute right-0 top-full z-[52] mt-1 w-36 rounded-lg border border-border bg-card py-1 shadow-lg" role="menu">
                   {mobileLinks.map((item) => (
                     <Link key={item.key} href={item.href} onClick={closeMenu} className="flex items-center gap-2.5 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" role="menuitem">
                       {item.icon}
