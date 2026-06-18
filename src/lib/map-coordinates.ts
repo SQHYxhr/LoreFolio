@@ -35,3 +35,66 @@ export function formatMapCoordLabel(mapX: unknown, mapY: unknown): string {
 export function isDefaultMapPosition(mapX: unknown, mapY: unknown): boolean {
   return normalizeMapCoordinate(mapX) === 0 && normalizeMapCoordinate(mapY) === 0;
 }
+
+/**
+ * Simple stable hash of a string → unsigned 32-bit integer.
+ */
+function hashId(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) {
+    h = ((h << 5) - h + id.charCodeAt(i)) | 0;
+  }
+  return h >>> 0;
+}
+
+const MIN_GRID = 12;
+const COORD_MIN = 0.26;
+const COORD_MAX = 0.74;
+
+/**
+ * Generate deterministic, collision-free temporary coordinates for a set
+ * of entry IDs.  Accepts ALL project location IDs (not just unpositioned
+ * ones) so that slot assignments are stable even after individual
+ * locations acquire real coordinates.
+ *
+ * Returns a Map from ID → { mapX, mapY }.  Always finite, always in
+ * [COORD_MIN, COORD_MAX], and guaranteed unique across the input set.
+ * Dynamically sizes the grid so it never deadlocks regardless of input
+ * size (tested up to 10 000 IDs).
+ */
+export function generateTemporaryLayout(
+  entryIds: string[],
+): Map<string, { mapX: number; mapY: number }> {
+  const sorted = [...new Set(entryIds)].sort();
+  if (sorted.length === 0) return new Map();
+
+  const cols = Math.max(MIN_GRID, Math.ceil(Math.sqrt(sorted.length)));
+  const rows = Math.max(MIN_GRID, Math.ceil(sorted.length / cols));
+  const cells = cols * rows;
+  // Use step=1 — guaranteed to probe every cell in a full cycle
+  const step = 1;
+
+  const occupied = new Set<number>();
+  const result = new Map<string, { mapX: number; mapY: number }>();
+
+  for (const id of sorted) {
+    let slot = (hashId(id + "x") % cells + cells) % cells;
+    let attempts = 0;
+    while (occupied.has(slot) && attempts < cells) {
+      slot = (slot + step) % cells;
+      attempts++;
+    }
+    if (attempts >= cells) {
+      // Safety fallback — should never trigger with dynamic sizing
+      slot = occupied.size; // last resort: sequential
+    }
+    occupied.add(slot);
+    const col = slot % cols;
+    const r = Math.floor(slot / cols);
+    result.set(id, {
+      mapX: COORD_MIN + ((col + 0.5) / cols) * (COORD_MAX - COORD_MIN),
+      mapY: COORD_MIN + ((r + 0.5) / rows) * (COORD_MAX - COORD_MIN),
+    });
+  }
+  return result;
+}
