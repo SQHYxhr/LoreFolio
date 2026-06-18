@@ -3,8 +3,8 @@
 import { Fragment, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import type { EntryType } from "@/types";
-import { ENTRY_TYPE_ICONS, ENTRY_TYPE_LABELS, ENTRY_TYPES } from "@/types";
+import type { Entry, EntryType } from "@/types";
+import { ENTRY_TYPE_ICONS, ENTRY_TYPE_LABELS } from "@/types";
 import { useStore } from "@/hooks/use-store";
 import { TopBar } from "@/components/TopBar";
 import { EmptyState } from "@/components/EmptyState";
@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 interface GlobalSearchViewProps { projectId: string }
 
 interface ScoredResult {
-  entry: (typeof searchScope)[number];
+  entry: Entry;
   hitSource: "title" | "tag" | "summary";
   sort: number; // 0=title, 1=tag, 2=summary
 }
